@@ -1,0 +1,69 @@
+.board {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.board table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  text-align: center;
+  width: fit-content;
+  min-width: 300px;
+}
+
+.board th, .board td {
+  border: 1px solid #aaa;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  font-size: 0.7rem;
+}
+
+.diagonal-cell {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.diagonal-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.diagonal-line line {
+  stroke: black;
+  stroke-width: 1;
+}
+
+.diagonal-cell input {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 0.6rem;
+  z-index: 1;
+}
+
+.diagonal-cell .top {
+  top: 0;
+  left: 0;
+}
+
+.diagonal-cell .bottom {
+  bottom: 0;
+  right: 0;
+}
+
+.black {
+  background-color: #000;
+}
