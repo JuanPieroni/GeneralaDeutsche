@@ -16,7 +16,7 @@ const categories = [
 
 const columns = ["A", "B", "C"]
 
-const Board = () => {
+const Board = ({ turnoActual }) => {
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
 
@@ -27,36 +27,36 @@ const Board = () => {
         }))
     }
 
-    const toggleBlack = (col, row) => {
-        const key = `${col}-${row}`
+    const toggleBlack = (col, row, player) => {
+        const key = `${col}-${row}-${player}`
         setBlackedOut((prev) => ({
             ...prev,
             [key]: !prev[key],
         }))
     }
 
+    const handleDoubleClick = (e, col, row) => {
+        const cell = e.currentTarget.getBoundingClientRect()
+        const clickY = e.clientY - cell.top
+        const isTopHalf = clickY < cell.height / 2
+        const targetPlayer = isTopHalf ? "top" : "bottom"
+        toggleBlack(col, row, targetPlayer)
+    }
+
     return (
         <div className="board">
+            <div className="board-header">
+                <h3>
+                    Turno de:{" "}
+                    {turnoActual === "jugador1"
+                        ? "Jugador 1 (Admin)"
+                        : "Jugador 2"}
+                </h3>
+            </div>
             <table>
                 <thead>
                     <tr>
-                        <th>
-                            {" "}
-                            <svg
-                                className="diagonal-line"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <line
-                                    x1="100%"
-                                    y1="0"
-                                    x2="0"
-                                    y2="100%"
-                                    stroke="black"
-                                    strokeWidth="1"
-                                />
-                            </svg>
-                        
-                        </th>
+                        <th>Categoría</th>
                         {columns.map((col) => (
                             <th key={col}>Generala {col}</th>
                         ))}
@@ -67,15 +67,15 @@ const Board = () => {
                         <tr key={row}>
                             <td>{row}</td>
                             {columns.map((col) => {
-                                const black = blackedOut[`${col}-${row}`]
+                                const blackTop = blackedOut[`${col}-${row}-top`]
+                                const blackBottom =
+                                    blackedOut[`${col}-${row}-bottom`]
                                 return (
                                     <td
                                         key={`${col}-${row}`}
-                                        className={`cell ${
-                                            black ? "black" : ""
-                                        }`}
-                                        onDoubleClick={() =>
-                                            toggleBlack(col, row)
+                                        className="cell"
+                                        onDoubleClick={(e) =>
+                                            handleDoubleClick(e, col, row)
                                         }
                                     >
                                         <div className="diagonal-cell">
@@ -92,6 +92,12 @@ const Board = () => {
                                                     strokeWidth="1"
                                                 />
                                             </svg>
+                                            {blackTop && (
+                                                <div className="black-overlay top-overlay"></div>
+                                            )}
+                                            {blackBottom && (
+                                                <div className="black-overlay bottom-overlay"></div>
+                                            )}
                                             <input
                                                 type="text"
                                                 className="top"
@@ -108,7 +114,7 @@ const Board = () => {
                                                         e.target.value
                                                     )
                                                 }
-                                                disabled={black}
+                                                disabled={blackTop}
                                             />
                                             <input
                                                 type="text"
@@ -126,8 +132,7 @@ const Board = () => {
                                                         e.target.value
                                                     )
                                                 }
-                                                
-                                                disabled={black}
+                                                disabled={blackBottom}
                                             />
                                         </div>
                                     </td>
