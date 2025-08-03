@@ -14,14 +14,12 @@
 .die {
   width: 60px;
   height: 60px;
-  font-size: 1.8rem;
   background-color: #f1f1f1;
   border: 2px solid #ccc;
   border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.3s;
@@ -29,8 +27,49 @@
 
 .die.held {
   background-color: #007bff;
-  color: white;
   border-color: #004a99;
+}
+
+.die-face {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+  position: relative;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: black;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.die-1 .dot-5,
+.die-2 .dot-1,
+.die-2 .dot-9,
+.die-3 .dot-1,
+.die-3 .dot-5,
+.die-3 .dot-9,
+.die-4 .dot-1,
+.die-4 .dot-3,
+.die-4 .dot-7,
+.die-4 .dot-9,
+.die-5 .dot-1,
+.die-5 .dot-3,
+.die-5 .dot-5,
+.die-5 .dot-7,
+.die-5 .dot-9,
+.die-6 .dot-1,
+.die-6 .dot-3,
+.die-6 .dot-4,
+.die-6 .dot-6,
+.die-6 .dot-7,
+.die-6 .dot-9 {
+  opacity: 1;
 }
 
 button {

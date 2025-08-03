@@ -14,6 +14,7 @@ const App = () => {
         false,
     ])
     const [throwsLeft, setThrowsLeft] = useState(3)
+     const [rollCount, setRollCount] = useState(0) // <-- contador de tiradas
 
     const tirarDados = () => {
         if (throwsLeft === 0) return
@@ -22,6 +23,7 @@ const App = () => {
         )
         setDice(newDice)
         setThrowsLeft((prev) => prev - 1)
+         setRollCount((prev) => prev + 1) // <-- incrementamos cada tirada
     }
 
     const toggleHold = (index) => {
@@ -39,6 +41,7 @@ const App = () => {
         setThrowsLeft(3)
         setHeldDice([false, false, false, false, false])
         setDice([0, 0, 0, 0, 0])
+        setRollCount(0) // <-- resetear contador al terminar turno
     }
 
     return (
@@ -54,6 +57,7 @@ const App = () => {
                     tirarDados={tirarDados}
                     toggleHold={toggleHold}
                     terminarTurno={terminarTurno}
+                     rollCount={rollCount} // <-- PASAR contador
                 />
                 <Chat /> 
             </div>
