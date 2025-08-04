@@ -5,6 +5,7 @@ import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
 import "./App.css"
 import { useSocket } from "./components/SocketContext"
+import GermanGeneralaChat from "./components/Chat2"
 
 const App = () => {
     const socket = useSocket()
@@ -115,9 +116,10 @@ const App = () => {
                         rollCount={rollCount} // <-- PASAR contador
                     />
                 </div>
-                <div className="chat-container">
+                <div  >
                     <Chat />
                 </div>
+                {/* <GermanGeneralaChat/> */}
             </div>
         </>
     )

@@ -1,6 +1,7 @@
 import React from "react"
 import { useEffect, useState } from "react"
 import { useSocket } from "./SocketContext"
+import "./Chat.css"
 
 const Chat = () => {
     const socket = useSocket()
@@ -27,16 +28,17 @@ const Chat = () => {
 
     const enviar = () => {
         if (input.trim() && socket) {
-          console.log("📤 Enviando mensaje:", input)
+            console.log("📤 Enviando mensaje:", input)
             socket.emit("chat-message", input)
             setInput("")
         }
     }
 
     return (
-        <div>
-            <h3>Chat</h3>
+        <div className="chat-container">
+            <h3 className="chat-title">Chat</h3>
             <div
+                className="chat-messages"
                 style={{
                     maxHeight: "150px",
                     overflowY: "auto",
@@ -44,15 +46,20 @@ const Chat = () => {
                 }}
             >
                 {mensajes.map((m, i) => (
-                    <div key={i}>{m}</div>
+                    <div key={i} className="chat-message">
+                        {m}
+                    </div>
                 ))}
             </div>
             <input
+                className="chat-input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Escribí algo"
             />
-            <button onClick={enviar}>Enviar</button>
+            <button className="chat-button" onClick={enviar}>
+                Enviar
+            </button>
         </div>
     )
 }
