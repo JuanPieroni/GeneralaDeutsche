@@ -99,7 +99,7 @@ const Board = ({ turnoActual }) => {
             </div>
             <table>
                 <thead>
-                    <tr>
+                    <tr className="tr-head">
                         <th>Categoría</th>
                         {columns.map((col) => (
                             <th key={col}>Generala {col}</th>
@@ -109,7 +109,7 @@ const Board = ({ turnoActual }) => {
                 <tbody>
                     {categories.map((row) => (
                         <tr key={row}>
-                            <td>{row}</td>
+                            <td className="td-body">{row}</td>
                             {columns.map((col) => {
                                 const blackTop = blackedOut[`${col}-${row}-top`]
                                 const blackBottom =

@@ -250,7 +250,7 @@ h1::after {
   .board-container {
     padding: 1rem;
     margin: 0;
-    max-width: none;
+    ;
   }
   
   .chat-container {
@@ -269,7 +269,7 @@ h1::after {
 }
 
 /* Animaciones adicionales */
-@keyframes slideInFromLeft {
+/* @keyframes slideInFromLeft {
   from {
     transform: translateX(-100%);
     opacity: 0;
@@ -278,7 +278,7 @@ h1::after {
     transform: translateX(0);
     opacity: 1;
   }
-}
+} */
 
 @keyframes slideInFromRight {
   from {
@@ -299,19 +299,6 @@ h1::after {
   animation: slideInFromRight 0.8s ease-out 0.2s both;
 }
 
-/* Efectos hover */
-.board-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 15px 40px rgba(0,0,0,0.6),
-    inset 0 2px 10px rgba(255, 206, 0, 0.4);
-  transition: all 0.3s ease;
-}
+ 
 
-.chat-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 15px 40px rgba(0,0,0,0.6),
-    inset 0 2px 10px rgba(221, 0, 0, 0.4);
-  transition: all 0.3s ease;
-}
+ 

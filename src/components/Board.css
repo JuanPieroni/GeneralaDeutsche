@@ -1,407 +1,421 @@
 /* Importar fuentes alemanas */
-@import url('https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel:wght@400;600;700&family=Kalam:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel:wght@400;600;700&family=Kalam:wght@400;700&display=swap");
 
 /* Variables alemanas */
 :root {
-  --paper-cream: #F8F5E4;
-  --paper-shadow: #E8E5D4;
-  --ink-black: #2C2C2C;
-  --german-red: #DD0000;
-  --german-gold: #FFCE00;
-  --pencil-gray: #666666;
-  --line-blue: #4A90E2;
+    --paper-cream: #f8f5e4;
+    --paper-shadow: #e8e5d4;
+    --ink-black: #2c2c2c;
+    --german-red: #dd0000;
+    --german-gold: #ffce00;
+    --pencil-gray: #666666;
+    --line-blue: #4a90e2;
 }
 
 .board {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
 }
 
 /* Header del tablero */
 .board-header {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  max-width: 700px;
-  margin-bottom: 2rem;
-  position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 2rem;
+    position: relative;
 }
 
 .board-header h3 {
-  font-family: 'Germania One', serif;
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
-  color: var(--german-red);
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  background: linear-gradient(135deg, var(--paper-cream), var(--paper-shadow));
-  padding: 0.8rem 2rem;
-  border: 3px solid var(--german-gold);
-  border-radius: 15px;
-  box-shadow: 
-    0 8px 20px rgba(0,0,0,0.2),
-    inset 0 2px 4px rgba(255,255,255,0.8);
-  position: relative;
-  letter-spacing: 1px;
+    font-family: "Germania One", serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--german-red);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(
+        135deg,
+        var(--paper-cream),
+        var(--paper-shadow)
+    );
+    padding: 0.8rem 2rem;
+    border: 3px solid var(--german-gold);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    position: relative;
+    letter-spacing: 1px;
 }
 
 /* Decoración de esquinas en el header */
 .board-header h3::before,
 .board-header h3::after {
-  content: '⚽';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8em;
-  color: var(--ink-black);
+    content: "⚽";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8em;
+    color: var(--ink-black);
 }
 
 .board-header h3::before {
-  left: 10px;
+    left: 10px;
 }
 
 .board-header h3::after {
-  right: 10px;
+    right: 10px;
 }
 
 /* Contenedor de la tabla - efecto hoja */
 .board table {
-  table-layout: fixed;
-  border-collapse: collapse;
-  text-align: center;
-  width: fit-content;
-  min-width: 400px;
-  background: var(--paper-cream);
-  box-shadow: 
-    0 15px 35px rgba(0,0,0,0.3),
-    0 5px 15px rgba(0,0,0,0.2),
-    inset 0 2px 4px rgba(255,255,255,0.9);
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  border: 4px solid var(--german-gold);
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: center;
+    width: fit-content;
+    min-width: 400px;
+    background: var(--paper-cream);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 4px solid var(--german-gold);
 }
 
 /* Efecto de papel con textura */
 .board table::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 24px,
-      rgba(74, 144, 226, 0.1) 25px,
-      rgba(74, 144, 226, 0.1) 26px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 39px,
-      rgba(221, 0, 0, 0.05) 40px,
-      rgba(221, 0, 0, 0.05) 41px
-    );
-  pointer-events: none;
-  z-index: 0;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 24px,
+            rgba(74, 144, 226, 0.1) 25px,
+            rgba(74, 144, 226, 0.1) 26px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 39px,
+            rgba(221, 0, 0, 0.05) 40px,
+            rgba(221, 0, 0, 0.05) 41px
+        );
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* Encabezados de la tabla */
 .board th {
-  background: linear-gradient(135deg, var(--german-red), #ff4444);
-  color: var(--paper-cream);
-  font-family: 'Germania One', serif;
-  font-size: 0.9rem;
-  font-weight: bold;
-  padding: 12px 8px;
-  height: 50px;
-  border: 2px solid var(--german-gold);
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-  letter-spacing: 1px;
-  position: relative;
-  z-index: 1;
+    background: linear-gradient(135deg, var(--german-red), #ff4444);
+    color: var(--paper-cream);
+    font-family: "Germania One", serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 12px 8px;
+    height: 50px;
+    border: 2px solid var(--german-gold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
 }
 
 .board th:first-child {
-  width: 120px;
-  background: linear-gradient(135deg, var(--german-gold), #ffdd44);
-  color: var(--ink-black);
-  text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+    width: 120px;
+    background: linear-gradient(135deg, var(--german-gold), #ffdd44);
+    color: var(--ink-black);
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 /* Celdas de la tabla */
 .board td {
-  border: 2px solid var(--pencil-gray);
-  padding: 0;
-  width: 60px;
-  height: 60px;
-  aspect-ratio: 1 / 1;
-  position: relative;
-  font-size: 0.8rem;
-  background: var(--paper-cream);
-  transition: all 0.2s ease;
+    border: 2px solid var(--pencil-gray);
+    padding: 0;
+    width: 60px;
+    height: 60px;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    font-size: 0.8rem;
+    background: var(--paper-cream);
+    transition: all 0.2s ease;
 }
 
 /* Primera columna (categorías) */
 .board td:first-child {
-  background: linear-gradient(135deg, var(--paper-cream), var(--paper-shadow));
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  color: var(--ink-black);
-  text-align: center;
-  padding: 8px;
-  width: 120px;
-  font-size: 0.85rem;
-  border-right: 3px solid var(--german-gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background: linear-gradient(
+        135deg,
+        var(--paper-cream),
+        var(--paper-shadow)
+    );
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+    color: var(--ink-black);
+    text-align: center;
+    padding: 8px;
+    width: 120px;
+    font-size: 0.85rem;
+    border-right: 3px solid var(--german-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Efecto hover sutil en celdas editables */
 .board td.cell:hover {
-  background: rgba(255, 206, 0, 0.1);
-  border-color: var(--german-gold);
+    background: rgba(255, 206, 0, 0.1);
+    border-color: var(--german-gold);
 }
 
 /* Contenedor diagonal */
 .diagonal-cell {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background: var(--paper-cream);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: var(--paper-cream);
 }
 
 /* Línea diagonal mejorada */
 .diagonal-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .diagonal-line line {
-  stroke: var(--pencil-gray);
-  stroke-width: 2;
-  stroke-dasharray: 2,2;
-  opacity: 0.7;
+    stroke: var(--pencil-gray);
+    stroke-width: 2;
+    stroke-dasharray: 2, 2;
+    opacity: 0.7;
 }
 
 /* Inputs con estilo de escritura a mano */
 .diagonal-cell input {
-  position: absolute;
-  width: 50%;
-  height: 50%;
-  border: none;
-  background: transparent;
-  text-align: center;
-  font-family: 'Kalam', cursive;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--ink-black);
-  z-index: 2;
-  outline: none;
-  transition: all 0.2s ease;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: "Kalam", cursive;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink-black);
+    z-index: 2;
+    outline: none;
+    transition: all 0.2s ease;
 }
 
 .diagonal-cell input:focus {
-  background: rgba(255, 206, 0, 0.2);
-  border-radius: 4px;
-  transform: scale(1.1);
+    background: rgba(255, 206, 0, 0.2);
+    border-radius: 4px;
+    transform: scale(1.1);
 }
 
 .diagonal-cell input:disabled {
-  color: rgba(44, 44, 44, 0.5);
+    color: rgba(44, 44, 44, 0.5);
 }
 
 /* Posicionamiento de inputs */
 .diagonal-cell .top {
-  top: 2px;
-  left: 2px;
-  transform-origin: center;
+    top: 2px;
+    left: 2px;
+    transform-origin: center;
 }
 
 .diagonal-cell .bottom {
-  bottom: 2px;
-  right: 2px;
-  transform-origin: center;
+    bottom: 2px;
+    right: 2px;
+    transform-origin: center;
 }
 
 /* Overlays negros mejorados - TODA la mitad */
 .black-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #000000, #333333);
-  opacity: 0.8;
-  z-index: 3;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.1);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #000000, #333333);
+    opacity: 0.8;
+    z-index: 3;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 .top-overlay {
-  top: 0;
-  left: 0;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
+    top: 0;
+    left: 0;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
 .bottom-overlay {
-  bottom: 0;
-  right: 0;
-  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    bottom: 0;
+    right: 0;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
 }
 
 /* Efectos de sombra para realismo */
 .board td:nth-child(even) {
-  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .board td:nth-child(odd) {
-  box-shadow: inset -1px -1px 3px rgba(0,0,0,0.05);
+    box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* Responsive para móvil - SIN GAP y MÁS CUADRADAS */
 @media (max-width: 768px) {
-  .board {
-    padding: 1rem 0.5rem;
-  }
+    .board {
+        padding: 1rem 0.5rem;
+    }
   
-  .board table {
-    table-layout: auto;
-    width: 100%;
-    max-width: 380px;
-    min-width: 320px;
-    border-radius: 8px;
-    font-size: 0.7rem;
-  }
-  
-  .board th, .board td {
-    width: auto;
-    height: 50px;
-    font-size: 0.65rem;
-    padding: 2px;
-    border: 1px solid var(--pencil-gray);
-  }
-  
-  .board th {
-    padding: 8px 4px;
-    height: 50px;
-  }
-  
-  .board td:first-child {
-    width: 28%;
-    font-size: 0.7rem;
-    padding: 2px;
-    background: linear-gradient(135deg, var(--paper-cream), var(--paper-shadow));
-    border: 1px solid var(--pencil-gray);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
-    color: var(--ink-black);
-  }
-  
-  .board td.cell {
-    width: 24%;
-    height: 50px;
-  }
-  
-  .diagonal-cell input {
-    font-size: 0.6rem;
-    font-weight: 700;
-  }
-  
-  .board-header {
-    margin-bottom: 1.5rem;
-    padding: 0 0.5rem;
-  }
-  
-  .board-header h3 {
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .board-header h3::before,
-  .board-header h3::after {
-    display: none;
-  }
+    .board table {
+        table-layout: auto;
+        width: 100%;
+        max-width: 380px;
+        min-width: 320px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+    }
+
+    .board th,
+    .board td {
+        width: auto;
+        height: 50px;
+        font-size: 0.65rem;
+        padding: 2px;
+        border: 1px solid var(--pencil-gray);
+    }
+
+    .board th {
+        padding: 8px 4px;
+        height: 50px;
+    }
+
+    .board td:first-child {
+        width:-1%;
+        font-size: 0.7rem;
+        padding: 2px;
+        background: linear-gradient(
+            135deg,
+            var(--paper-cream),
+            var(--paper-shadow)
+        );
+        border: 1px solid var(--pencil-gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+        color: var(--ink-black);
+    }
+
+    .board td.cell {
+        width: 24%;
+        height: 50px;
+    }
+
+    .diagonal-cell input {
+        font-size: 0.6rem;
+        font-weight: 700;
+    }
+
+    .board-header {
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .board-header h3 {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .board-header h3::before,
+    .board-header h3::after {
+        display: none;
+    }
 }
 
-/* Responsive para pantallas muy pequeñas - ARREGLADO */
+/*  Responsive para pantallas muy pequeñas - ARREGLADO  */
 @media (max-width: 480px) {
-  .board {
-    padding: 0.5rem 0.25rem;
-  }
-  
-  .board table {
-    min-width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-  }
-  
-  .board th, .board td {
-    width: auto;
-    min-width: 30px;
-    height: 38px;
-    font-size: 0.6rem;
-  }
-  
-  .board th {
-    padding: 6px 2px;
-    height: 40px;
-  }
-  
-  .board td:first-child {
-    width: auto;
-    min-width: 70px;
-    font-size: 0.65rem;
-    padding: 1px;
-  }
-  
-  .diagonal-cell input {
-    font-size: 0.55rem;
-    font-weight: 700;
-  }
-  
-  .board-header h3 {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.8rem;
-  }
+    .board {
+        padding: 0.5rem 0.25rem;
+    }
+
+    .board table {
+        min-width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .board th,
+    .board td {
+        width: auto;
+        min-width: 30px;
+        height: 38px;
+        font-size: 0.6rem;
+    }
+
+    .board th {
+        padding: 6px 2px;
+        height: 40px;
+    }
+
+    .board td:first-child {
+        width: auto;
+        min-width: 70px;
+        font-size: 0.65rem;
+        padding: 1px;
+    }
+
+    .diagonal-cell input {
+        font-size: 0.55rem;
+        font-weight: 700;
+    }
+
+    .board-header h3 {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+    }
 }
 
 /* Animación de entrada */
 @keyframes paperDrop {
-  from {
-    transform: translateY(-20px) rotateX(20deg);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) rotateX(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateY(-20px) rotateX(20deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) rotateX(0);
+        opacity: 1;
+    }
 }
 
 .board table {
-  animation: paperDrop 0.6s ease-out;
+    animation: paperDrop 0.6s ease-out;
 }
 
 /* Efecto de escritura en inputs */
 @keyframes writing {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .diagonal-cell input:focus {
-  animation: writing 0.3s ease-in-out;
+    animation: writing 0.3s ease-in-out;
 }
