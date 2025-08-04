@@ -1,6 +1,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import "./DiceRoller.css"
+ import { useSocket } from "./SocketContext"
 
 const DieFace = ({ value }) => {
     return (

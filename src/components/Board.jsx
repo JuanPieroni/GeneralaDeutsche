@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import "./Board.css"
+import { useSocket } from "./SocketContext"
+import { useEffect } from "react"
 
 const categories = [
     "1",
@@ -14,25 +16,67 @@ const categories = [
     "Generala",
 ]
 
-const columns = ["A", "B", "C"]
+const columns = ["1", "2", "3"]
 
 const Board = ({ turnoActual }) => {
+    const socket = useSocket()
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
 
+    useEffect(() => {
+        if (!socket) return
+
+        const handleBoardUpdate = (updatedCell) => {
+            console.log("Recibido update-board:", updatedCell)
+            setScores((prev) => ({
+                ...prev,
+                ...updatedCell,
+            }))
+        }
+
+        const handleBlackoutUpdate = (updatedBlackout) => {
+            console.log("Recibido update-board-blackout:", updatedBlackout)
+            setBlackedOut((prev) => ({
+                ...prev,
+                ...updatedBlackout,
+            }))
+        }
+
+        socket.on("update-board", handleBoardUpdate)
+        socket.on("update-board-blackout", handleBlackoutUpdate)
+
+        return () => {
+            socket.off("update-board", handleBoardUpdate)
+            socket.off("update-board-blackout", handleBlackoutUpdate)
+        }
+    }, [socket])
+
     const handleInputChange = (col, row, player, value) => {
+        console.log(socket.connected, "escribiendo...")
+        const key = `${col}-${row}-${player}`
         setScores((prev) => ({
             ...prev,
-            [`${col}-${row}-${player}`]: value,
+            [key]: value,
         }))
+        if (socket) {
+            socket.emit("update-board", { [key]: value })
+        }
     }
-
     const toggleBlack = (col, row, player) => {
         const key = `${col}-${row}-${player}`
-        setBlackedOut((prev) => ({
-            ...prev,
-            [key]: !prev[key],
-        }))
+        setBlackedOut((prev) => {
+            const newState = {
+                ...prev,
+                [key]: !prev[key],
+            }
+            console.log("Emitiendo blackoutt:", { [key]: newState[key] }) // <- Asegurate de tener este log para debug
+            // Emitir al servidor
+            if (socket) {
+                socket.emit("update-board-blackout", { [key]: newState[key] })
+            }
+
+            return newState
+        })
     }
 
     const handleDoubleClick = (e, col, row) => {
