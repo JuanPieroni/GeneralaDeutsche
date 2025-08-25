@@ -21,7 +21,7 @@ const DiceRoller = ({
     tirarDados,
     toggleHold,
     terminarTurno,
-    rollCount, // <-- recibe el contador de tiradas
+    rollCount,
 }) => {
     return (
         <div className="dice-roller">

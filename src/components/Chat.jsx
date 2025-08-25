@@ -1,5 +1,5 @@
 import React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useSocket } from "./SocketContext"
 import "./Chat.css"
 
@@ -7,24 +7,30 @@ const Chat = () => {
     const socket = useSocket()
     const [input, setInput] = useState("")
     const [mensajes, setMensajes] = useState([])
+    const messagesEndRef = useRef(null)
 
     useEffect(() => {
         if (!socket) return
-        console.log("📡 Socket conectado:", socket)
+        
+        const handleGameState = (gameState) => {
+            setMensajes(gameState.chat)
+        }
 
-        socket.on("connect", () => {
-            console.log("📡 Socket conectado con ID:", socket.id)
-        })
+        socket.on("game-state", handleGameState)
         socket.on("chat-message", (msg) => {
             console.log("📨 Mensaje recibido:", msg)
             setMensajes((prev) => [...prev, msg])
         })
 
         return () => {
+            socket.off("game-state", handleGameState)
             socket.off("chat-message")
-            socket.off("connect")
         }
     }, [socket])
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [mensajes])
 
     const enviar = () => {
         if (input.trim() && socket) {
@@ -34,15 +40,20 @@ const Chat = () => {
         }
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            enviar()
+        }
+    }
+
     return (
         <div className="chat-container">
             <h3 className="chat-title">Chat</h3>
             <div
                 className="chat-messages"
                 style={{
-                    maxHeight: "150px",
+                    maxHeight: "200px",
                     overflowY: "auto",
-                    border: "1px solid #ccc",
                 }}
             >
                 {mensajes.map((m, i) => (
@@ -50,16 +61,20 @@ const Chat = () => {
                         {m}
                     </div>
                 ))}
+                <div ref={messagesEndRef} />
             </div>
-            <input
-                className="chat-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribí algo"
-            />
-            <button className="chat-button" onClick={enviar}>
-                Enviar
-            </button>
+            <div className="chat-input-container">
+                <input
+                    className="chat-input"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Escribí algo..."
+                />
+                <button className="chat-button" onClick={enviar}>
+                    Enviar
+                </button>
+            </div>
         </div>
     )
 }

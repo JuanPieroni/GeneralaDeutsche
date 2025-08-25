@@ -14,6 +14,18 @@ const App = () => {
             console.log("Socket no está listo aún")
             return
         }
+        
+        const handleGameState = (gameState) => {
+            console.log("📥 Estado completo del juego recibido:", gameState)
+            if (gameState.dice) {
+                setDice(gameState.dice.dice)
+                setHeldDice(gameState.dice.heldDice)
+                setThrowsLeft(gameState.dice.throwsLeft)
+                setRollCount(gameState.dice.rollCount)
+                setTurnoActual(gameState.dice.turnoActual)
+            }
+        }
+        
         const handleDiceUpdate = (diceState) => {
             console.log("⬇️ Recibido update-diceroller:", diceState)
             setDice(diceState.dice)
@@ -21,14 +33,19 @@ const App = () => {
             setThrowsLeft(diceState.throwsLeft)
             setRollCount(diceState.rollCount)
         }
-
+        
+        const handleTurnUpdate = (turno) => {
+            setTurnoActual(turno)
+        }
+        
+        socket.on("game-state", handleGameState)
         socket.on("update-diceroller", handleDiceUpdate)
-
-        console.log("🟢 Listener update-diceroller agregado")
+        socket.on("update-turn", handleTurnUpdate)
 
         return () => {
+            socket.off("game-state", handleGameState)
             socket.off("update-diceroller", handleDiceUpdate)
-            console.log("🔴 Listener update-diceroller removido")
+            socket.off("update-turn", handleTurnUpdate)
         }
     }, [socket])
 
@@ -87,13 +104,20 @@ const App = () => {
     }
 
     const terminarTurno = () => {
-        setTurnoActual((prev) =>
-            prev === "jugador1" ? "jugador2" : "jugador1"
-        )
+        const nuevoTurno = turnoActual === "jugador1" ? "jugador2" : "jugador1"
+        setTurnoActual(nuevoTurno)
         setThrowsLeft(3)
         setHeldDice([false, false, false, false, false])
         setDice([0, 0, 0, 0, 0])
-        setRollCount(0) // <-- resetear contador al terminar turno
+        setRollCount(0)
+        
+        socket.emit("update-turn", nuevoTurno)
+        socket.emit("update-diceroller", {
+            dice: [0, 0, 0, 0, 0],
+            heldDice: [false, false, false, false, false],
+            throwsLeft: 3,
+            rollCount: 0
+        })
     }
 
     return (
@@ -113,10 +137,10 @@ const App = () => {
                         tirarDados={tirarDados}
                         toggleHold={toggleHold}
                         terminarTurno={terminarTurno}
-                        rollCount={rollCount} // <-- PASAR contador
+                        rollCount={rollCount}
                     />
                 </div>
-                <div  >
+                <div>
                     <Chat />
                 </div>
                 {/* <GermanGeneralaChat/> */}

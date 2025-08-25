@@ -25,6 +25,11 @@ const Board = ({ turnoActual }) => {
 
     useEffect(() => {
         if (!socket) return
+        
+        const handleGameState = (gameState) => {
+            setScores(gameState.board)
+            setBlackedOut(gameState.blackout)
+        }
 
         const handleBoardUpdate = (updatedCell) => {
             console.log("Recibido update-board:", updatedCell)
@@ -42,10 +47,12 @@ const Board = ({ turnoActual }) => {
             }))
         }
 
+        socket.on("game-state", handleGameState)
         socket.on("update-board", handleBoardUpdate)
         socket.on("update-board-blackout", handleBlackoutUpdate)
 
         return () => {
+            socket.off("game-state", handleGameState)
             socket.off("update-board", handleBoardUpdate)
             socket.off("update-board-blackout", handleBlackoutUpdate)
         }
@@ -89,14 +96,14 @@ const Board = ({ turnoActual }) => {
 
     return (
         <div className="board">
-            <div className="board-header">
+     {/*        <div className="board-header">
                 <h3>
                     Turno de:{" "}
                     {turnoActual === "jugador1"
                         ? "Jugador 1 (Admin)"
                         : "Jugador 2"}
                 </h3>
-            </div>
+            </div> */}
             <table>
                 <thead>
                     <tr className="tr-head">

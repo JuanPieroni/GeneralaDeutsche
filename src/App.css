@@ -75,37 +75,7 @@ h1 {
   }
 }
 
-/* Decoración del título */
-h1::before,
-h1::after {
-  content: '🍺';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.6em;
-  animation: bounce 2s infinite;
-}
 
-h1::before {
-  left: -80px;
-  animation-delay: 0.5s;
-}
-
-h1::after {
-  right: -80px;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(-50%);
-  }
-  40% {
-    transform: translateY(-60%);
-  }
-  60% {
-    transform: translateY(-40%);
-  }
-}
 
 /* Container principal */
 .app-container {
