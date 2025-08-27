@@ -30,7 +30,7 @@ const Chat = () => {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [mensajes])
+    }, [mensajes])  
 
     const enviar = () => {
         if (input.trim() && socket) {

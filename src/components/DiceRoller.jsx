@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useRef } from "react"
 import { motion } from "framer-motion"
 import "./DiceRoller.css"
- import { useSocket } from "./SocketContext"
+import { useSocket } from "./SocketContext"
 
 const DieFace = ({ value }) => {
     return (
@@ -23,11 +23,44 @@ const DiceRoller = ({
     terminarTurno,
     rollCount,
 }) => {
+    const shakeAudioRef = useRef(null)
+    const rollAudioRef = useRef(null)
+    
+    const startShakeSound = () => {
+        if (shakeAudioRef.current) {
+            shakeAudioRef.current.currentTime = 0
+            shakeAudioRef.current.loop = true
+           //quiero que no haya gap de silencio en el audio
+
+           
+            shakeAudioRef.current.play()
+        }
+    }
+    
+    const stopShakeSound = () => {
+        if (shakeAudioRef.current) {
+            shakeAudioRef.current.pause()
+            shakeAudioRef.current.currentTime = 0
+        }
+    }
+    
+    const playRollSound = () => {
+        if (rollAudioRef.current) {
+            rollAudioRef.current.currentTime = 0
+            rollAudioRef.current.play()
+        }
+    }
+    
+    const handleMouseUp = () => {
+        stopShakeSound()
+        playRollSound()
+        tirarDados()
+    }
     return (
         <div className="dice-roller">
             <h3>
-                Tirar dados - Turno de:{" "}
-                {turnoActual === "jugador1" ? "Jugador 1 (Admin)" : "Jugador 2"}
+                 Turno de:{" "}
+                {turnoActual === "jugador1" ? "Jugador TOP" : "Jugador ¨B"}
             </h3>
             <div className="dice-container">
                 {dice.map((num, idx) => {
@@ -83,7 +116,18 @@ const DiceRoller = ({
                 })}
             </div>
             <div>
-                <button onClick={tirarDados} disabled={throwsLeft === 0}>
+                <audio ref={shakeAudioRef} preload="auto">
+                    <source src="/src/assets/sounds/shake.mp3" type="audio/mpeg" />
+                </audio>
+                <audio ref={rollAudioRef} preload="auto">
+                    <source src="/src/assets/sounds/roll.mp3" type="audio/mpeg" />
+                </audio>
+                <button 
+                    onMouseDown={startShakeSound}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={stopShakeSound}
+                    disabled={throwsLeft === 0}
+                >
                     Tirar Dados ({throwsLeft})
                 </button>
                 <button onClick={terminarTurno} style={{ marginLeft: 10 }}>

@@ -6,6 +6,7 @@ import Chat from "./components/Chat"
 import "./App.css"
 import { useSocket } from "./components/SocketContext"
 import GermanGeneralaChat from "./components/Chat2"
+import BackgroundCollage from "./components/BackgroundCollage"
 
 const App = () => {
     const socket = useSocket()
@@ -122,6 +123,7 @@ const App = () => {
 
     return (
         <>
+        <BackgroundCollage/>
             <h1>GENERALA ALEMANA</h1>
             <div className="app-container">
                 <div

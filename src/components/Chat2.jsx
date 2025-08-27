@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Send, Dice1, Crown } from "lucide-react"
 import { useSocket } from "./SocketContext"
 
@@ -10,7 +10,7 @@ const  GermanGeneralaChat = () => {
         "📋 Sistema: Chat iniciado - ¡Viel Glück!",
     ])
     const [input, setInput] = useState("")
-    const chatRef = useRef(null)
+  
 
     const enviar = () => {
         if (input.trim() && socket) {
@@ -27,9 +27,6 @@ const  GermanGeneralaChat = () => {
     }
 
     useEffect(() => {
-        if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight
-        }
         if (!socket) return
         console.log("📡 Socket conectado:", socket)
 
@@ -45,7 +42,7 @@ const  GermanGeneralaChat = () => {
             socket.off("chat-message")
             socket.off("connect")
         }
-    }, [mensajes, socket])
+    }, [socket])
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-yellow-800 p-4">
@@ -73,7 +70,6 @@ const  GermanGeneralaChat = () => {
                 <div className="bg-gradient-to-b from-amber-50 to-yellow-100 border-4 border-red-800 shadow-2xl">
                     {/* Chat Messages */}
                     <div
-                        ref={chatRef}
                         className="h-80 overflow-y-auto p-4 space-y-3"
                         style={{
                             backgroundImage: `linear-gradient(45deg, rgba(255,215,0,0.1) 25%, transparent 25%), 
