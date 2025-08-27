@@ -2,14 +2,30 @@ import express from "express"
 import { createServer } from "http"
 import { Server } from "socket.io"
 import cors from "cors"
+import path from "path"
+import { fileURLToPath } from "url"
 
 const app = express()
 const httpServer = createServer(app)
 
+
+// 🟡 Resolver __dirname en ESModules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+// 🟢 Middleware para servir el build de React
+app.use(express.static(path.join(__dirname, "dist")));
+
+// 🟣 Allowed origins (dev + futuro deploy)
+const allowedOrigins = [
+  "http://localhost:5173",              // desarrollo local
+  "https://miapp.netlify.app"           // poner la URL real
+]
 // ⚠️ CORS para permitir desde el frontend
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: allowedOrigins',
         methods: ["GET", "POST"],
         credentials: true,
     })
@@ -18,7 +34,7 @@ app.use(
 // inicializamos socket.io
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: allowedOrigins,
         methods: ["GET", "POST"],
         credentials: true,
     },
@@ -38,6 +54,17 @@ let gameState = {
     chat: [],
     players: {}
 }
+
+
+// 🟣 Rutas API
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hola desde el backend 🚀" });
+});
+
+// 🟡 Cualquier otra ruta → React
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 // escucha de sockets
 io.on("connection", (socket) => {
@@ -103,7 +130,7 @@ io.on("connection", (socket) => {
 })
 
 // levantamos el servidor
-const PORT = 3000
+const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
     console.log(`🚀 Backend corriendo en http://localhost:${PORT}`)
 })
