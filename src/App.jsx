@@ -16,6 +16,17 @@ const App = () => {
             return
         }
         
+        // Asignar jugador automáticamente al conectarse
+        const handleConnect = () => {
+            socket.emit("set-player", `Jugador-${socket.id.slice(-4)}`)
+        }
+        
+        if (socket.connected) {
+            handleConnect()
+        } else {
+            socket.on("connect", handleConnect)
+        }
+        
         const handleGameState = (gameState) => {
             console.log("📥 Estado completo del juego recibido:", gameState)
             if (gameState.dice) {
@@ -47,6 +58,7 @@ const App = () => {
             socket.off("game-state", handleGameState)
             socket.off("update-diceroller", handleDiceUpdate)
             socket.off("update-turn", handleTurnUpdate)
+            socket.off("connect", handleConnect)
         }
     }, [socket])
 

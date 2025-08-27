@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import "./DiceRoller.css"
 import { useSocket } from "./SocketContext"
@@ -23,8 +23,38 @@ const DiceRoller = ({
     terminarTurno,
     rollCount,
 }) => {
+    const socket = useSocket()
+    const [playerRole, setPlayerRole] = useState(null)
     const shakeAudioRef = useRef(null)
     const rollAudioRef = useRef(null)
+    
+    useEffect(() => {
+        if (!socket) return
+        
+        const handlePlayerAssigned = ({ role }) => {
+            setPlayerRole(role)
+        }
+        
+        const handleGameState = (gameState) => {
+            // Buscar nuestro rol en los jugadores conectados
+            const ourPlayer = Object.entries(gameState.players || {}).find(([id]) => id === socket.id)
+            if (ourPlayer) {
+                setPlayerRole(ourPlayer[1].role)
+            }
+        }
+        
+        socket.on("player-assigned", handlePlayerAssigned)
+        socket.on("game-state", handleGameState)
+        
+        return () => {
+            socket.off("player-assigned", handlePlayerAssigned)
+            socket.off("game-state", handleGameState)
+        }
+    }, [socket])
+    
+    const isMyTurn = playerRole === turnoActual
+    
+    console.log('DiceRoller - playerRole:', playerRole, 'turnoActual:', turnoActual, 'isMyTurn:', isMyTurn)
     
     const startShakeSound = () => {
         if (shakeAudioRef.current) {
@@ -96,16 +126,16 @@ const DiceRoller = ({
                                 onClick={() => toggleHold(idx)}
                                 title="Click para retener dado"
                                 initial={{
-                                    scale: 0.5,
-                                    rotate: -180,
+                                    scale: 1.2,
+                                    rotate: -2800,
                                     opacity: 0,
                                 }}
                                 animate={{ scale: 1, rotate: 0, opacity: 1 }}
                                 transition={{
                                     type: "spring",
                                     stiffness: 300,
-                                    damping: 15,
-                                    delay: idx * 0.5,
+                                    damping: 10,
+                                    delay: idx * 0.3,
                                     duration: 0.4,
                                 }}
                             >
@@ -126,7 +156,7 @@ const DiceRoller = ({
                     onMouseDown={startShakeSound}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={stopShakeSound}
-                    disabled={throwsLeft === 0}
+                    disabled={throwsLeft === 0 || !isMyTurn}
                 >
                     Tirar Dados ({throwsLeft})
                 </button>
