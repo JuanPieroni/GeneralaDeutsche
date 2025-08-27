@@ -5,7 +5,7 @@ import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
 import "./App.css"
 import { useSocket } from "./components/SocketContext"
-import GermanGeneralaChat from "./components/Chat2"
+ 
 import BackgroundCollage from "./components/BackgroundCollage"
 
 const App = () => {
@@ -157,7 +157,7 @@ const App = () => {
                 <div>
                     <Chat />
                 </div>
-                {/* <GermanGeneralaChat/> */}
+             
             </div>
         </>
     )
