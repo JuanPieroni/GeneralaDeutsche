@@ -23,6 +23,9 @@
     box-sizing: border-box;
 }
  
+body{ 
+    background-color: #000000cb;
+}
  
 
 /* Título principal */

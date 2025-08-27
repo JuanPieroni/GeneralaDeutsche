@@ -5,7 +5,7 @@ import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
 import "./App.css"
 import { useSocket } from "./components/SocketContext"
- 
+
 import BackgroundCollage from "./components/BackgroundCollage"
 
 const App = () => {
@@ -15,18 +15,18 @@ const App = () => {
             console.log("Socket no está listo aún")
             return
         }
-        
+
         // Asignar jugador automáticamente al conectarse
         const handleConnect = () => {
             socket.emit("set-player", `Jugador-${socket.id.slice(-4)}`)
         }
-        
+
         if (socket.connected) {
             handleConnect()
         } else {
             socket.on("connect", handleConnect)
         }
-        
+
         const handleGameState = (gameState) => {
             console.log("📥 Estado completo del juego recibido:", gameState)
             if (gameState.dice) {
@@ -37,7 +37,7 @@ const App = () => {
                 setTurnoActual(gameState.dice.turnoActual)
             }
         }
-        
+
         const handleDiceUpdate = (diceState) => {
             console.log("⬇️ Recibido update-diceroller:", diceState)
             setDice(diceState.dice)
@@ -45,11 +45,11 @@ const App = () => {
             setThrowsLeft(diceState.throwsLeft)
             setRollCount(diceState.rollCount)
         }
-        
+
         const handleTurnUpdate = (turno) => {
             setTurnoActual(turno)
         }
-        
+
         socket.on("game-state", handleGameState)
         socket.on("update-diceroller", handleDiceUpdate)
         socket.on("update-turn", handleTurnUpdate)
@@ -123,19 +123,19 @@ const App = () => {
         setHeldDice([false, false, false, false, false])
         setDice([0, 0, 0, 0, 0])
         setRollCount(0)
-        
+
         socket.emit("update-turn", nuevoTurno)
         socket.emit("update-diceroller", {
             dice: [0, 0, 0, 0, 0],
             heldDice: [false, false, false, false, false],
             throwsLeft: 3,
-            rollCount: 0
+            rollCount: 0,
         })
     }
 
     return (
         <>
-        <BackgroundCollage/>
+            {/*  <BackgroundCollage/>   */}
             <h1>GENERALA ALEMANA</h1>
             <div className="app-container">
                 <div
@@ -157,7 +157,6 @@ const App = () => {
                 <div>
                     <Chat />
                 </div>
-             
             </div>
         </>
     )
