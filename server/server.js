@@ -8,19 +8,18 @@ import { fileURLToPath } from "url"
 const app = express()
 const httpServer = createServer(app)
 
-
 // 🟡 Resolver __dirname en ESModules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // 🟢 Middleware para servir el build de React
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(path.join(__dirname, "dist")))
 
 // 🟣 Allowed origins (dev + futuro deploy)
 const allowedOrigins = [
-  "http://localhost:5173",              // desarrollo local
-  "https://generaladeutsche.netlify.app"           // poner la URL real
+    "http://localhost:5173", // desarrollo local
+    "https://generaladeutsche.netlify.app",
+    "https://generaladeutsche.onrender.com",  
 ]
 // ⚠️ CORS para permitir desde el frontend
 app.use(
@@ -49,31 +48,28 @@ let gameState = {
         heldDice: [false, false, false, false, false],
         throwsLeft: 3,
         rollCount: 0,
-        turnoActual: "jugador1"
+        turnoActual: "jugador1",
     },
     chat: [],
-    players: {}
+    players: {},
 }
-
-
-
 
 // escucha de sockets
 io.on("connection", (socket) => {
     console.log("✅ Usuario conectado:", socket.id)
-    
+
     // Enviar estado actual al nuevo cliente
     socket.emit("game-state", gameState)
-    
+
     socket.on("set-player", (playerName) => {
         const playerCount = Object.keys(gameState.players).length
         const playerRole = playerCount === 0 ? "jugador1" : "jugador2"
-        
+
         gameState.players[socket.id] = {
             name: playerName,
-            role: playerRole
+            role: playerRole,
         }
-        
+
         socket.emit("player-assigned", { role: playerRole, name: playerName })
         io.emit("players-update", gameState.players)
     })
@@ -102,19 +98,19 @@ io.on("connection", (socket) => {
         gameState.dice = { ...gameState.dice, ...diceState }
         io.emit("update-diceroller", diceState)
     })
-    
+
     socket.on("update-turn", (turno) => {
         gameState.dice.turnoActual = turno
         io.emit("update-turn", turno)
     })
-    
+
     socket.on("reset-board", () => {
         console.log("🗑️ Server recibió reset-board")
         gameState.board = {}
         gameState.blackout = {}
         io.emit("reset-board")
     })
-    
+
     socket.on("disconnect", () => {
         delete gameState.players[socket.id]
         io.emit("players-update", gameState.players)
@@ -122,7 +118,7 @@ io.on("connection", (socket) => {
 })
 
 // levantamos el servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 httpServer.listen(PORT, () => {
     console.log(`🚀 Backend corriendo en http://localhost:${PORT}`)
 })
