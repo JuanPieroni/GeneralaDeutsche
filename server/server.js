@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "dist")));
 // 🟣 Allowed origins (dev + futuro deploy)
 const allowedOrigins = [
   "http://localhost:5173",              // desarrollo local
-  "https://generaladeutsche.netlify.app/"           // poner la URL real
+  "https://generaladeutsche.netlify.app"           // poner la URL real
 ]
 // ⚠️ CORS para permitir desde el frontend
 app.use(
