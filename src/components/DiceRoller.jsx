@@ -55,7 +55,8 @@ const DiceRoller = ({
         }
     }, [socket])
 
-    const isMyTurn = playerRole === turnoActual
+    // Si no tenemos playerRole aún, permitir que ambos botones funcionen temporalmente
+    const isMyTurn = playerRole ? playerRole === turnoActual : true
 
     console.log(
         "DiceRoller - playerRole:",
@@ -165,7 +166,7 @@ const DiceRoller = ({
                    whileTap={{ scale: 0.8 }}
                     onClick={terminarTurno}
                     style={{ marginLeft: 10 }}
-                    disabled={false} 
+                    disabled={false}
                 >
                     Terminar turno
                 </motion.button>

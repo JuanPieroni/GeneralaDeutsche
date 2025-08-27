@@ -62,35 +62,36 @@ const App = () => {
         }
     }, [socket])
 
+    const INITIAL_DICE = [0, 0, 0, 0, 0]
+    const INITIAL_HELD = [false, false, false, false, false]
+    const MAX_THROWS = 3
+    
     const [turnoActual, setTurnoActual] = useState("jugador1")
-    const [dice, setDice] = useState([0, 0, 0, 0, 0])
-    const [heldDice, setHeldDice] = useState([
-        false,
-        false,
-        false,
-        false,
-        false,
-    ])
-    const [throwsLeft, setThrowsLeft] = useState(3)
-    const [rollCount, setRollCount] = useState(0) // <-- contador de tiradas
+    const [dice, setDice] = useState(INITIAL_DICE)
+    const [heldDice, setHeldDice] = useState(INITIAL_HELD)
+    const [throwsLeft, setThrowsLeft] = useState(MAX_THROWS)
+    const [rollCount, setRollCount] = useState(0)
     const tirarDados = () => {
         if (throwsLeft === 0) return
         const newDice = dice.map((d, i) =>
             heldDice[i] ? d : Math.floor(Math.random() * 6) + 1
         )
+        const newThrowsLeft = throwsLeft - 1
+        const newRollCount = rollCount + 1
+        
         setDice(newDice)
-        setThrowsLeft((prev) => prev - 1)
-        setRollCount((prev) => prev + 1)
+        setThrowsLeft(newThrowsLeft)
+        setRollCount(newRollCount)
 
         const payload = {
             dice: newDice,
             heldDice,
-            throwsLeft: throwsLeft - 1,
-            rollCount: rollCount + 1,
+            throwsLeft: newThrowsLeft,
+            rollCount: newRollCount,
         }
         console.log(
             "⬆️ Emitiendo dice:update desde tirarDados con datos:",
-            payload
+            JSON.stringify(payload)
         )
         socket.emit("update-diceroller", payload)
     }
@@ -108,7 +109,7 @@ const App = () => {
             }
             console.log(
                 "⬆️ Emitiendo dice:update desde toggleHold con datos:",
-                payload
+                JSON.stringify(payload)
             )
             socket.emit("update-diceroller", payload)
 
@@ -119,16 +120,16 @@ const App = () => {
     const terminarTurno = () => {
         const nuevoTurno = turnoActual === "jugador1" ? "jugador2" : "jugador1"
         setTurnoActual(nuevoTurno)
-        setThrowsLeft(3)
-        setHeldDice([false, false, false, false, false])
-        setDice([0, 0, 0, 0, 0])
+        setThrowsLeft(MAX_THROWS)
+        setHeldDice(INITIAL_HELD)
+        setDice(INITIAL_DICE)
         setRollCount(0)
 
         socket.emit("update-turn", nuevoTurno)
         socket.emit("update-diceroller", {
-            dice: [0, 0, 0, 0, 0],
-            heldDice: [false, false, false, false, false],
-            throwsLeft: 3,
+            dice: INITIAL_DICE,
+            heldDice: INITIAL_HELD,
+            throwsLeft: MAX_THROWS,
             rollCount: 0,
         })
     }

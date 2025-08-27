@@ -13,6 +13,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // 🟢 Middleware para servir el build de React
+// amazonq-ignore-next-line
 app.use(express.static(path.join(__dirname, "dist")))
 
 // 🟣 Allowed origins (dev + futuro deploy)
@@ -40,7 +41,7 @@ const io = new Server(httpServer, {
 })
 
 // Estado global del juego
-let gameState = {
+const gameState = {
     board: {},
     blackout: {},
     dice: {
@@ -59,7 +60,12 @@ io.on("connection", (socket) => {
     console.log("✅ Usuario conectado:", socket.id)
 
     // Enviar estado actual al nuevo cliente
-    socket.emit("game-state", gameState)
+    socket.emit("game-state", {
+        board: gameState.board,
+        blackout: gameState.blackout,
+        dice: gameState.dice,
+        players: gameState.players
+    })
 
     socket.on("set-player", (playerName) => {
         const playerCount = Object.keys(gameState.players).length
@@ -75,6 +81,11 @@ io.on("connection", (socket) => {
     })
 
     socket.on("chat-message", (msg) => {
+        const player = gameState.players[socket.id]
+        if (!player) {
+            return // Unauthorized
+        }
+        
         console.log("💬 Mensaje recibido:", msg)
         gameState.chat.push(msg)
         io.emit("chat-message", msg)
@@ -94,12 +105,17 @@ io.on("connection", (socket) => {
 
     // diceroller
     socket.on("update-diceroller", (diceState) => {
-        console.log("🟢 Server recibió update-diceroller:", diceState)
+        console.log("🟢 Server recibió update-diceroller:", JSON.stringify(diceState))
         gameState.dice = { ...gameState.dice, ...diceState }
         io.emit("update-diceroller", diceState)
     })
 
     socket.on("update-turn", (turno) => {
+        const player = gameState.players[socket.id]
+        if (!player || player.role !== gameState.dice.turnoActual) {
+            return // Unauthorized
+        }
+        
         gameState.dice.turnoActual = turno
         io.emit("update-turn", turno)
     })
