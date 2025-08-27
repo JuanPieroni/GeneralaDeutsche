@@ -390,6 +390,32 @@
     }
 }
 
+/* Controles del tablero */
+.board-controls {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.reset-button {
+    background: linear-gradient(135deg, var(--german-red), #ff4444);
+    color: var(--paper-cream);
+    border: 2px solid var(--german-gold);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: "Germania One", serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reset-button:hover {
+    background: linear-gradient(135deg, #ff4444, var(--german-red));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
 /* Animación de entrada */
 @keyframes paperDrop {
     from {

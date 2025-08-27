@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import "./Board.css"
 import { useSocket } from "./SocketContext"
 import { useEffect } from "react"
+import Swal from "sweetalert2"
 
 const categories = [
     "1",
@@ -18,14 +19,14 @@ const categories = [
 
 const columns = ["1", "2", "3"]
 
-const Board = ({ turnoActual }) => {
+const Board = ({ turnoActual, onResetBoard }) => {
     const socket = useSocket()
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
 
     useEffect(() => {
         if (!socket) return
-        
+
         const handleGameState = (gameState) => {
             setScores(gameState.board)
             setBlackedOut(gameState.blackout)
@@ -47,14 +48,22 @@ const Board = ({ turnoActual }) => {
             }))
         }
 
+        const handleResetBoard = () => {
+            console.log("Recibido reset-board del servidor")
+            setScores({})
+            setBlackedOut({})
+        }
+
         socket.on("game-state", handleGameState)
         socket.on("update-board", handleBoardUpdate)
         socket.on("update-board-blackout", handleBlackoutUpdate)
+        socket.on("reset-board", handleResetBoard)
 
         return () => {
             socket.off("game-state", handleGameState)
             socket.off("update-board", handleBoardUpdate)
             socket.off("update-board-blackout", handleBlackoutUpdate)
+            socket.off("reset-board", handleResetBoard)
         }
     }, [socket])
 
@@ -94,20 +103,44 @@ const Board = ({ turnoActual }) => {
         toggleBlack(col, row, targetPlayer)
     }
 
+    const resetBoard = () => {
+        Swal.fire({
+            title: "¿Borrar Puntajes?",
+            text: "Se borrarán todos los puntajes del tablero",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dd0000",
+            cancelButtonColor: "#666666",
+            confirmButtonText: "Sí, borrar",
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setScores({})
+                setBlackedOut({})
+                if (socket) {
+                    socket.emit("reset-board")
+                }
+                if (onResetBoard) onResetBoard()
+                Swal.fire(
+                    "Listo!!",
+                    "El tablero ha sido borrado para una nueva partida",
+                    "success"
+                )
+            }
+        })
+    }
+
     return (
         <div className="board">
-     {/*        <div className="board-header">
-                <h3>
-                    Turno de:{" "}
-                    {turnoActual === "jugador1"
-                        ? "Jugador 1 (Admin)"
-                        : "Jugador 2"}
-                </h3>
-            </div> */}
+            <div className="board-controls">
+                <button onClick={resetBoard} className="reset-button">
+                    🗑️ Limpiar Tablero
+                </button>
+            </div>
             <table>
                 <thead>
                     <tr className="tr-head">
-                        <th>Categoría</th>
+                        <th>🌭🍺🌭🍺</th>
                         {columns.map((col) => (
                             <th key={col}>Generala {col}</th>
                         ))}

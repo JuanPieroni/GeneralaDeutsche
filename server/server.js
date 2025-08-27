@@ -89,6 +89,13 @@ io.on("connection", (socket) => {
         io.emit("update-turn", turno)
     })
     
+    socket.on("reset-board", () => {
+        console.log("🗑️ Server recibió reset-board")
+        gameState.board = {}
+        gameState.blackout = {}
+        io.emit("reset-board")
+    })
+    
     socket.on("disconnect", () => {
         delete gameState.players[socket.id]
         io.emit("players-update", gameState.players)

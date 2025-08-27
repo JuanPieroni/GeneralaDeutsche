@@ -90,7 +90,7 @@ const DiceRoller = ({
         <div className="dice-roller">
             <h3>
                  Turno de:{" "}
-                {turnoActual === "jugador1" ? "Jugador TOP" : "Jugador ¨B"}
+                {turnoActual === "jugador1" ? "Jugador TOP" : "Jugador ¨BOTTOM"}
             </h3>
             <div className="dice-container">
                 {dice.map((num, idx) => {
@@ -160,7 +160,7 @@ const DiceRoller = ({
                 >
                     Tirar Dados ({throwsLeft})
                 </button>
-                <button onClick={terminarTurno} style={{ marginLeft: 10 }}>
+                <button onClick={terminarTurno} style={{ marginLeft: 10 }} disabled={throwsLeft === 0 || !isMyTurn}>
                     Terminar Turno
                 </button>
             </div>
