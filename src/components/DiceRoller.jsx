@@ -104,67 +104,39 @@ const DiceRoller = ({
             <div className="dice-container">
                 {dice.map((num, idx) => {
                     // Para dados retenidos, key fija para que no se reanime
-                    if (heldDice[idx]) {
-                        return (
-                            <motion.div
-                                layout
-                                key={`held-${idx}`}
-                                className={`die held`}
-                                onClick={() => isMyTurn && toggleHold(idx)}
-                                 style={{
-    pointerEvents: isMyTurn ? "auto" : "none", // 👈 bloquea clicks si no es mi turno
-    opacity: isMyTurn ? 1 : 0.5 // 👈 feedback visual
-  }}
-                                title="Dado retenido - Click para soltar"
-                                initial={false}
-                                animate={false}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 300,
-                                    damping: 15,
-                                    delay: idx * 0.5,
-                                    duration: 0.4,
-                                }}
-                            >
-                                <DieFace value={num} />
-                            </motion.div>
-                        )
-                    } else {
-                        // Para dados libres, key cambia con rollCount para forzar animación
-                        return (
-                            <motion.div
-                                layout
-                                key={`dice-${idx}-${rollCount}`}
-                                className="die"
-                               onClick={() => isMyTurn && toggleHold(idx)}
-                                style={{
-    pointerEvents: isMyTurn ? "auto" : "none", // 👈 bloquea clicks si no es mi turno
-    opacity: isMyTurn ? 1 : 0.5 // 👈 feedback visual
-  }}
-                                title="Click para retener dado"
-                                initial={{
-                                    scale: 1.2,
-                                    rotate: -2800,
-                                    opacity: 0,
-                                }}
-                                animate={isShaking ? {
-                                    scale: 1,
-                                    rotate: 3600,
-                                    opacity: 0.3,
-                                    filter: "brightness(2)"
-                                } : { scale: 1, rotate: 0, opacity: 1 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 300,
-                                    damping: 10,
-                                    delay: idx * 0.3,
-                                    duration: 0.4,
-                                }}
-                            >
-                                <DieFace value={num} />
-                            </motion.div>
-                        )
-                    }
+                    return (
+                        <motion.div
+                            layout
+                            key={heldDice[idx] ? `held-${idx}` : `dice-${idx}-${rollCount}`}
+                            className={heldDice[idx] ? "die held" : "die"}
+                            onClick={() => isMyTurn && toggleHold(idx)}
+                            style={{
+                                pointerEvents: isMyTurn ? "auto" : "none",
+                                opacity: isMyTurn ? 1 : 0.5
+                            }}
+                            title={heldDice[idx] ? "Dado retenido - Click para soltar" : "Click para retener dado"}
+                            initial={heldDice[idx] ? false : {
+                                scale: 1.2,
+                                rotate: -2800,
+                                opacity: 0,
+                            }}
+                            animate={heldDice[idx] ? false : (isShaking ? {
+                                scale: 1,
+                                rotate: 3600,
+                                opacity: 0.3,
+                                filter: "brightness(2)"
+                            } : { scale: 1, rotate: 0, opacity: 1 })}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300,
+                                damping: heldDice[idx] ? 15 : 10,
+                                delay: heldDice[idx] ? idx * 0.5 : idx * 0.3,
+                                duration: 0.4,
+                            }}
+                        >
+                            <DieFace value={num} />
+                        </motion.div>
+                    )
                 })}
             </div>
             <div>
