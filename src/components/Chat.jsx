@@ -13,7 +13,7 @@ const Chat = () => {
         if (!socket) return
         
         const handleGameState = (gameState) => {
-            setMensajes(gameState.chat)
+            setMensajes(gameState.chat || [])
         }
 
         socket.on("game-state", handleGameState)
@@ -56,7 +56,7 @@ const Chat = () => {
                     overflowY: "auto",
                 }}
             >
-                {mensajes.map((m, i) => (
+                {(mensajes || []).map((m, i) => (
                     <div key={i} className="chat-message">
                         {m}
                     </div>
