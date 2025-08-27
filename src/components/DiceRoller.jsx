@@ -164,13 +164,13 @@ const DiceRoller = ({
             <div>
                 <audio ref={shakeAudioRef} preload="auto">
                     <source
-                        src="/src/assets/sounds/shake.mp3"
+                        src="/sounds/shake.mp3"
                         type="audio/mpeg"
                     />
                 </audio>
                 <audio ref={rollAudioRef} preload="auto">
                     <source
-                        src="/src/assets/sounds/roll.mp3"
+                        src="sounds/roll.mp3"
                         type="audio/mpeg"
                     />
                 </audio>
