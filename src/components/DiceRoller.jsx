@@ -25,6 +25,7 @@ const DiceRoller = ({
 }) => {
     const socket = useSocket()
     const [playerRole, setPlayerRole] = useState(null)
+    const [isShaking, setIsShaking] = useState(false)
     const shakeAudioRef = useRef(null)
     const rollAudioRef = useRef(null)
 
@@ -66,16 +67,16 @@ const DiceRoller = ({
     )
 
     const startShakeSound = () => {
+        setIsShaking(true)
         if (shakeAudioRef.current) {
             shakeAudioRef.current.currentTime = 0
             shakeAudioRef.current.loop = true
-            //quiero que no haya gap de silencio en el audio
-
             shakeAudioRef.current.play()
         }
     }
 
     const stopShakeSound = () => {
+        setIsShaking(false)
         if (shakeAudioRef.current) {
             shakeAudioRef.current.pause()
             shakeAudioRef.current.currentTime = 0
@@ -146,7 +147,12 @@ const DiceRoller = ({
                                     rotate: -2800,
                                     opacity: 0,
                                 }}
-                                animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                                animate={isShaking ? {
+                                    scale: 1,
+                                    rotate: 3600,
+                                    opacity: 0.3,
+                                    filter: "brightness(2)"
+                                } : { scale: 1, rotate: 0, opacity: 1 }}
                                 transition={{
                                     type: "spring",
                                     stiffness: 300,

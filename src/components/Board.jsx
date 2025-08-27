@@ -142,7 +142,7 @@ const Board = ({ turnoActual, onResetBoard }) => {
                     <tr className="tr-head">
                         <th>🌭🍺🌭🍺</th>
                         {columns.map((col) => (
-                            <th key={col}>Generala {col}</th>
+                            <th key={col}>{col}</th>
                         ))}
                     </tr>
                 </thead>
