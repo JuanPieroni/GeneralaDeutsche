@@ -27,60 +27,68 @@ const DiceRoller = ({
     const [playerRole, setPlayerRole] = useState(null)
     const shakeAudioRef = useRef(null)
     const rollAudioRef = useRef(null)
-    
+
     useEffect(() => {
         if (!socket) return
-        
+
         const handlePlayerAssigned = ({ role }) => {
             setPlayerRole(role)
         }
-        
+
         const handleGameState = (gameState) => {
             // Buscar nuestro rol en los jugadores conectados
-            const ourPlayer = Object.entries(gameState.players || {}).find(([id]) => id === socket.id)
+            const ourPlayer = Object.entries(gameState.players || {}).find(
+                ([id]) => id === socket.id
+            )
             if (ourPlayer) {
                 setPlayerRole(ourPlayer[1].role)
             }
         }
-        
+
         socket.on("player-assigned", handlePlayerAssigned)
         socket.on("game-state", handleGameState)
-        
+
         return () => {
             socket.off("player-assigned", handlePlayerAssigned)
             socket.off("game-state", handleGameState)
         }
     }, [socket])
-    
+
     const isMyTurn = playerRole === turnoActual
-    
-    console.log('DiceRoller - playerRole:', playerRole, 'turnoActual:', turnoActual, 'isMyTurn:', isMyTurn)
-    
+
+    console.log(
+        "DiceRoller - playerRole:",
+        playerRole,
+        "turnoActual:",
+        turnoActual,
+        "isMyTurn:",
+        isMyTurn
+    )
+
     const startShakeSound = () => {
         if (shakeAudioRef.current) {
             shakeAudioRef.current.currentTime = 0
             shakeAudioRef.current.loop = true
-           //quiero que no haya gap de silencio en el audio
+            //quiero que no haya gap de silencio en el audio
 
-           
             shakeAudioRef.current.play()
         }
     }
-    
+
     const stopShakeSound = () => {
         if (shakeAudioRef.current) {
             shakeAudioRef.current.pause()
             shakeAudioRef.current.currentTime = 0
         }
     }
-    
+
     const playRollSound = () => {
         if (rollAudioRef.current) {
             rollAudioRef.current.currentTime = 0
             rollAudioRef.current.play()
         }
     }
-    
+
     const handleMouseUp = () => {
         stopShakeSound()
         playRollSound()
@@ -89,7 +97,7 @@ const DiceRoller = ({
     return (
         <div className="dice-roller">
             <h3>
-                 Turno de:{" "}
+                Turno de:{" "}
                 {turnoActual === "jugador1" ? "Jugador TOP" : "Jugador ¨BOTTOM"}
             </h3>
             <div className="dice-container">
@@ -101,7 +109,11 @@ const DiceRoller = ({
                                 layout
                                 key={`held-${idx}`}
                                 className={`die held`}
-                                onClick={() => toggleHold(idx)}
+                                onClick={() => isMyTurn && toggleHold(idx)}
+                                 style={{
+    pointerEvents: isMyTurn ? "auto" : "none", // 👈 bloquea clicks si no es mi turno
+    opacity: isMyTurn ? 1 : 0.5 // 👈 feedback visual
+  }}
                                 title="Dado retenido - Click para soltar"
                                 initial={false}
                                 animate={false}
@@ -123,7 +135,11 @@ const DiceRoller = ({
                                 layout
                                 key={`dice-${idx}-${rollCount}`}
                                 className="die"
-                                onClick={() => toggleHold(idx)}
+                               onClick={() => isMyTurn && toggleHold(idx)}
+                                style={{
+    pointerEvents: isMyTurn ? "auto" : "none", // 👈 bloquea clicks si no es mi turno
+    opacity: isMyTurn ? 1 : 0.5 // 👈 feedback visual
+  }}
                                 title="Click para retener dado"
                                 initial={{
                                     scale: 1.2,
@@ -147,22 +163,35 @@ const DiceRoller = ({
             </div>
             <div>
                 <audio ref={shakeAudioRef} preload="auto">
-                    <source src="/src/assets/sounds/shake.mp3" type="audio/mpeg" />
+                    <source
+                        src="/src/assets/sounds/shake.mp3"
+                        type="audio/mpeg"
+                    />
                 </audio>
                 <audio ref={rollAudioRef} preload="auto">
-                    <source src="/src/assets/sounds/roll.mp3" type="audio/mpeg" />
+                    <source
+                        src="/src/assets/sounds/roll.mp3"
+                        type="audio/mpeg"
+                    />
                 </audio>
-                <button 
+                <motion.button
+                  whileTap={{ scale: 0.8 }}
                     onMouseDown={startShakeSound}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={stopShakeSound}
                     disabled={throwsLeft === 0 || !isMyTurn}
                 >
                     Tirar Dados ({throwsLeft})
-                </button>
-                <button onClick={terminarTurno} style={{ marginLeft: 10 }} disabled={throwsLeft === 0 || !isMyTurn}>
-                    Terminar Turno
-                </button>
+                </motion.button>
+                <motion.button
+                   whileTap={{ scale: 0.8 }}
+                    onClick={terminarTurno}
+                    style={{ marginLeft: 10 }}
+                    disabled={!isMyTurn}
+                >
+                    Terminar turno
+                </motion.button>
+ 
             </div>
         </div>
     )
