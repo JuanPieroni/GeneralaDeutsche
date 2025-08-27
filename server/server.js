@@ -56,15 +56,7 @@ let gameState = {
 }
 
 
-// 🟣 Rutas API
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hola desde el backend 🚀" });
-});
 
-// 🟡 Cualquier otra ruta → React
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
 
 // escucha de sockets
 io.on("connection", (socket) => {
