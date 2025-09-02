@@ -49,7 +49,6 @@ const gameState = {
         heldDice: [false, false, false, false, false],
         throwsLeft: 3,
         rollCount: 0,
-        turnoActual: "jugador1",
     },
     chat: [],
     players: {},
@@ -108,24 +107,11 @@ io.on("connection", (socket) => {
 
     // diceroller
     socket.on("update-diceroller", (diceState) => {
-        const player = gameState.players[socket.id]
-        if (!player || player.role !== gameState.dice.turnoActual) {
-            return // No es su turno
-        }
-        
         gameState.dice = { ...gameState.dice, ...diceState }
         io.emit("update-diceroller", diceState)
     })
 
-    socket.on("update-turn", (turno) => {
-        const player = gameState.players[socket.id]
-        if (!player || player.role !== gameState.dice.turnoActual) {
-            return // Unauthorized
-        }
-        
-        gameState.dice.turnoActual = turno
-        io.emit("update-turn", turno)
-    })
+
 
     socket.on("reset-board", () => {
         console.log("🗑️ Server recibió reset-board")

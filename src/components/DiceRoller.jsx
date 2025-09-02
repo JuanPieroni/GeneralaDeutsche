@@ -17,46 +17,14 @@ const DiceRoller = ({
     dice,
     heldDice,
     throwsLeft,
-    turnoActual,
     tirarDados,
     toggleHold,
-    terminarTurno,
+    resetDados,
     rollCount,
 }) => {
-    const socket = useSocket()
-    const [playerRole, setPlayerRole] = useState(null)
     const [isShaking, setIsShaking] = useState(false)
     const shakeAudioRef = useRef(null)
     const rollAudioRef = useRef(null)
-
-    useEffect(() => {
-        if (!socket) return
-
-        const handlePlayerAssigned = ({ role }) => {
-            setPlayerRole(role)
-        }
-
-        const handleGameState = (gameState) => {
-            // Buscar nuestro rol en los jugadores conectados
-            const ourPlayer = Object.entries(gameState.players || {}).find(
-                ([id]) => id === socket.id
-            )
-            if (ourPlayer) {
-                setPlayerRole(ourPlayer[1].role)
-            }
-        }
-
-        socket.on("player-assigned", handlePlayerAssigned)
-        socket.on("game-state", handleGameState)
-
-        return () => {
-            socket.off("player-assigned", handlePlayerAssigned)
-            socket.off("game-state", handleGameState)
-        }
-    }, [socket])
-
-    // Si no tenemos playerRole aún, permitir que ambos botones funcionen temporalmente
-    const isMyTurn = playerRole ? playerRole === turnoActual : true
 
 
 
@@ -91,10 +59,7 @@ const DiceRoller = ({
     }
     return (
         <div className="dice-roller">
-            <h3>
-                Turno de:{" "}
-                {turnoActual === "jugador1" ? "Jugador TOP" : "Jugador ¨BOTTOM"}
-            </h3>
+            <h3>Dados de Generala</h3>
             <div className="dice-container">
                 {dice.map((num, idx) => {
                     // Para dados retenidos, key fija para que no se reanime
@@ -103,11 +68,7 @@ const DiceRoller = ({
                             layout
                             key={heldDice[idx] ? `held-${idx}` : `dice-${idx}-${rollCount}`}
                             className={heldDice[idx] ? "die held" : "die"}
-                            onClick={() => isMyTurn && toggleHold(idx)}
-                            style={{
-                                pointerEvents: isMyTurn ? "auto" : "none",
-                                opacity: isMyTurn ? 1 : 0.5
-                            }}
+                            onClick={() => toggleHold(idx)}
                             title={heldDice[idx] ? "Dado retenido - Click para soltar" : "Click para retener dado"}
                             initial={heldDice[idx] ? false : {
                                 scale: 1.2,
@@ -151,17 +112,16 @@ const DiceRoller = ({
                     onMouseDown={startShakeSound}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={stopShakeSound}
-                    disabled={throwsLeft === 0 || !isMyTurn}
+                    disabled={throwsLeft === 0}
                 >
                     Tirar Dados ({throwsLeft})
                 </motion.button>
                 <motion.button
                    whileTap={{ scale: 0.8 }}
-                    onClick={terminarTurno}
+                    onClick={resetDados}
                     style={{ marginLeft: 10 }}
-                    disabled={false}
                 >
-                    Terminar turno
+                    Reset Dados
                 </motion.button>
  
             </div>

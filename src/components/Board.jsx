@@ -19,7 +19,7 @@ const categories = [
 
 const columns = ["1", "2", "3"]
 
-const Board = ({ turnoActual, onResetBoard, playerRole, players }) => {
+const Board = ({ onResetBoard }) => {
     const socket = useSocket()
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
@@ -126,13 +126,6 @@ const Board = ({ turnoActual, onResetBoard, playerRole, players }) => {
     return (
         <div className="board">
             <div className="board-controls">
-                <div style={{ marginBottom: '10px', textAlign: 'center' }}>
-                    <span style={{ fontSize: '14px', color: '#666' }}>
-                        Eres: <strong>{playerRole === 'jugador1' ? 'TOP' : playerRole === 'jugador2' ? 'BOTTOM' : 'Esperando...'}</strong>
-                        {playerRole && ` | Turno: ${turnoActual === 'jugador1' ? 'TOP' : 'BOTTOM'}`}
-                        {playerRole === turnoActual && ' (Tu turno)'}
-                    </span>
-                </div>
                 <button onClick={resetBoard} className="reset-button">
                     🗑️ Limpiar Tablero
                 </button>
