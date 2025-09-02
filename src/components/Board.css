@@ -1,16 +1,4 @@
-/* Importar fuentes alemanas */
-@import url("https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel:wght@400;600;700&family=Kalam:wght@400;700&display=swap");
-
-/* Variables alemanas */
-:root {
-    --paper-cream: #f8f5e4;
-    --paper-shadow: #e8e5d4;
-    --ink-black: #2c2c2c;
-    --german-red: #dd0000;
-    --german-gold: #ffce00;
-    --pencil-gray: #666666;
-    --line-blue: #4a90e2;
-}
+/* Board específico - usa variables globales */
 
 .board {
     display: flex;
@@ -20,7 +8,6 @@
     position: relative;
 }
 
-/* Header del tablero */
 .board-header {
     display: flex;
     justify-content: center;
@@ -35,18 +22,15 @@
     font-size: clamp(1.2rem, 3vw, 1.8rem);
     color: var(--german-red);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(
-        135deg,
-        var(--paper-cream),
-        var(--paper-shadow)
-    );
+    background: linear-gradient(135deg, var(--paper-cream), var(--paper-shadow));
     padding: 0.8rem 2rem;
-    border: 3px solid var(--german-gold);
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.8);
     position: relative;
     letter-spacing: 1px;
+}
+
+.board-header h3 {
+    @extend .german-border;
+    @extend .paper-shadow;
 }
 
 /* Decoración de esquinas en el header */
@@ -76,12 +60,14 @@
     width: fit-content;
     min-width: 400px;
     background: var(--paper-cream);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.2),
-        inset 0 2px 4px rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
     overflow: hidden;
     position: relative;
     border: 4px solid var(--german-gold);
+}
+
+.board table {
+    @extend .paper-shadow;
+    @extend .german-border;
 }
 
 /* Efecto de papel con textura */
@@ -110,9 +96,7 @@
     z-index: 0;
 }
 
-/* Encabezados de la tabla */
 .board th {
-    background: linear-gradient(135deg, var(--german-red), #ff4444);
     color: var(--paper-cream);
     font-family: "Germania One", serif;
     font-size: 0.9rem;
@@ -124,6 +108,10 @@
     letter-spacing: 1px;
     position: relative;
     z-index: 1;
+}
+
+.board th:not(:first-child) {
+    background: linear-gradient(135deg, var(--german-red), #ff4444);
 }
 
 .board th:first-child {
@@ -398,7 +386,6 @@
 }
 
 .reset-button {
-    background: linear-gradient(135deg, var(--german-red), #ff4444);
     color: var(--paper-cream);
     border: 2px solid var(--german-gold);
     padding: 8px 16px;
@@ -408,6 +395,10 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reset-button {
+    @extend .german-gradient;
 }
 
 .reset-button:hover {

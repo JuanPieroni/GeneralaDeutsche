@@ -1,0 +1,40 @@
+/* Variables globales alemanas */
+:root {
+    --paper-cream: #f8f5e4;
+    --paper-shadow: #e8e5d4;
+    --ink-black: #2c2c2c;
+    --german-red: #dd0000;
+    --german-gold: #ffce00;
+    --pencil-gray: #666666;
+    --line-blue: #4a90e2;
+}
+
+/* Fuentes alemanas */
+@import url("https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel:wght@400;600;700&family=Kalam:wght@400;700&display=swap");
+
+/* Reset y base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Cinzel", serif;
+    background: #111;
+    color: var(--ink-black);
+}
+
+/* Utilidades reutilizables */
+.german-gradient {
+    background: linear-gradient(135deg, var(--german-red), #ff4444);
+}
+
+.paper-shadow {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.german-border {
+    border: 3px solid var(--german-gold);
+    border-radius: 12px;
+}

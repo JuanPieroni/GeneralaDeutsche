@@ -124,13 +124,13 @@ const Board = ({ onResetBoard }) => {
     }
 
     return (
-        <div className="board">
-            <div className="board-controls">
+        <div className="board" style={{ display: 'block', minHeight: '300px' }}>
+            <div className="board-controls" style={{ display: 'block' }}>
                 <button onClick={resetBoard} className="reset-button">
                     🗑️ Limpiar Tablero
                 </button>
             </div>
-            <table>
+            <table style={{ display: 'table', width: '100%' }}>
                 <thead>
                     <tr className="tr-head">
                         <th>🌭🍺🌭🍺</th>

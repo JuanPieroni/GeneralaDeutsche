@@ -4,9 +4,10 @@ import Board from "./components/Board"
 import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
 import "./App.css"
+import "./styles/globals.css"
 import { useSocket } from "./components/SocketContext"
 
-import BackgroundCollage from "./components/BackgroundCollage"
+
 
 // Constantes fuera del componente para evitar recreación
 const INITIAL_DICE = [0, 0, 0, 0, 0]
@@ -119,12 +120,12 @@ const App = () => {
 
     return (
         <>
-            {/*  <BackgroundCollage/>   */}
-            <h1>GENERALA ALEMANA</h1>
+
+            <h1 style={{ fontSize: '2rem', textAlign: 'center', margin: '1rem 0', display: 'block' }}>GENERALA ALEMANA</h1>
             <div className="app-container">
                 <div
                     className="board-container"
-                    style={{ maxWidth: 600, margin: "auto", padding: "1rem" }}
+                    style={{ maxWidth: 600, margin: "auto", padding: "1rem", minHeight: '400px', display: 'block' }}
                 >
                     <Board />
                     <DiceRoller
