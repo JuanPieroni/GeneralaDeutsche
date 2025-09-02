@@ -1,5 +1,5 @@
 import React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import Board from "./components/Board"
 import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
@@ -8,27 +8,28 @@ import { useSocket } from "./components/SocketContext"
 
 import BackgroundCollage from "./components/BackgroundCollage"
 
+// Constantes fuera del componente para evitar recreación
+const INITIAL_DICE = [0, 0, 0, 0, 0]
+const INITIAL_HELD = [false, false, false, false, false]
+const MAX_THROWS = 3
+
 const App = () => {
     const socket = useSocket()
-    useEffect(() => {
-        if (!socket) {
-            console.log("Socket no está listo aún")
-            return
-        }
+    
+    const [turnoActual, setTurnoActual] = useState("jugador1")
+    const [dice, setDice] = useState(INITIAL_DICE)
+    const [heldDice, setHeldDice] = useState(INITIAL_HELD)
+    const [throwsLeft, setThrowsLeft] = useState(MAX_THROWS)
+    const [rollCount, setRollCount] = useState(0)
 
-        // Asignar jugador automáticamente al conectarse
+    useEffect(() => {
+        if (!socket) return
+
         const handleConnect = () => {
             socket.emit("set-player", `Jugador-${socket.id.slice(-4)}`)
         }
 
-        if (socket.connected) {
-            handleConnect()
-        } else {
-            socket.on("connect", handleConnect)
-        }
-
         const handleGameState = (gameState) => {
-            console.log("📥 Estado completo del juego recibido:", gameState)
             if (gameState.dice) {
                 setDice(gameState.dice.dice)
                 setHeldDice(gameState.dice.heldDice)
@@ -39,7 +40,6 @@ const App = () => {
         }
 
         const handleDiceUpdate = (diceState) => {
-            console.log("⬇️ Recibido update-diceroller:", diceState)
             setDice(diceState.dice)
             setHeldDice(diceState.heldDice)
             setThrowsLeft(diceState.throwsLeft)
@@ -48,6 +48,12 @@ const App = () => {
 
         const handleTurnUpdate = (turno) => {
             setTurnoActual(turno)
+        }
+
+        if (socket.connected) {
+            handleConnect()
+        } else {
+            socket.on("connect", handleConnect)
         }
 
         socket.on("game-state", handleGameState)
@@ -62,16 +68,7 @@ const App = () => {
         }
     }, [socket])
 
-    const INITIAL_DICE = [0, 0, 0, 0, 0]
-    const INITIAL_HELD = [false, false, false, false, false]
-    const MAX_THROWS = 3
-    
-    const [turnoActual, setTurnoActual] = useState("jugador1")
-    const [dice, setDice] = useState(INITIAL_DICE)
-    const [heldDice, setHeldDice] = useState(INITIAL_HELD)
-    const [throwsLeft, setThrowsLeft] = useState(MAX_THROWS)
-    const [rollCount, setRollCount] = useState(0)
-    const tirarDados = () => {
+    const tirarDados = useCallback(() => {
         if (throwsLeft === 0) return
         const newDice = dice.map((d, i) =>
             heldDice[i] ? d : Math.floor(Math.random() * 6) + 1
@@ -89,14 +86,12 @@ const App = () => {
             throwsLeft: newThrowsLeft,
             rollCount: newRollCount,
         }
-        console.log(
-            "⬆️ Emitiendo dice:update desde tirarDados con datos:",
-            JSON.stringify(payload)
-        )
-        socket.emit("update-diceroller", payload)
-    }
+        if (socket) {
+            socket.emit("update-diceroller", payload)
+        }
+    }, [throwsLeft, dice, heldDice, rollCount, socket])
 
-    const toggleHold = (index) => {
+    const toggleHold = useCallback((index) => {
         setHeldDice((prev) => {
             const copy = [...prev]
             copy[index] = !copy[index]
@@ -107,17 +102,14 @@ const App = () => {
                 throwsLeft,
                 rollCount,
             }
-            console.log(
-                "⬆️ Emitiendo dice:update desde toggleHold con datos:",
-                JSON.stringify(payload)
-            )
-            socket.emit("update-diceroller", payload)
-
+            if (socket) {
+                socket.emit("update-diceroller", payload)
+            }
             return copy
         })
-    }
+    }, [dice, throwsLeft, rollCount, socket])
 
-    const terminarTurno = () => {
+    const terminarTurno = useCallback(() => {
         const nuevoTurno = turnoActual === "jugador1" ? "jugador2" : "jugador1"
         setTurnoActual(nuevoTurno)
         setThrowsLeft(MAX_THROWS)
@@ -125,14 +117,16 @@ const App = () => {
         setDice(INITIAL_DICE)
         setRollCount(0)
 
-        socket.emit("update-turn", nuevoTurno)
-        socket.emit("update-diceroller", {
-            dice: INITIAL_DICE,
-            heldDice: INITIAL_HELD,
-            throwsLeft: MAX_THROWS,
-            rollCount: 0,
-        })
-    }
+        if (socket) {
+            socket.emit("update-turn", nuevoTurno)
+            socket.emit("update-diceroller", {
+                dice: INITIAL_DICE,
+                heldDice: INITIAL_HELD,
+                throwsLeft: MAX_THROWS,
+                rollCount: 0,
+            })
+        }
+    }, [turnoActual, socket])
 
     return (
         <>

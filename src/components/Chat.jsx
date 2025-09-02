@@ -6,43 +6,43 @@ import "./Chat.css"
 const Chat = () => {
     const socket = useSocket()
     const [input, setInput] = useState("")
-    const [mensajes, setMensajes] = useState([])
+    const [messages, setMessages] = useState([])
     const messagesEndRef = useRef(null)
 
     useEffect(() => {
         if (!socket) return
         
         const handleGameState = (gameState) => {
-            setMensajes(gameState.chat || [])
+            setMessages(gameState.chat || [])
+        }
+
+        const handleChatMessage = (msg) => {
+            setMessages((prev) => [...prev, msg])
         }
 
         socket.on("game-state", handleGameState)
-        socket.on("chat-message", (msg) => {
-            console.log("📨 Mensaje recibido:", msg)
-            setMensajes((prev) => [...prev, msg])
-        })
+        socket.on("chat-message", handleChatMessage)
 
         return () => {
             socket.off("game-state", handleGameState)
-            socket.off("chat-message")
+            socket.off("chat-message", handleChatMessage)
         }
     }, [socket])
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, [mensajes])  
+    }, [messages])  
 
-    const enviar = () => {
+    const sendMessage = () => {
         if (input.trim() && socket) {
-            console.log("📤 Enviando mensaje:", input)
             socket.emit("chat-message", input)
             setInput("")
         }
     }
 
-    const handleKeyPress = (e) => {
+    const handleKeyDown = (e) => {
         if (e.key === "Enter") {
-            enviar()
+            sendMessage()
         }
     }
 
@@ -56,8 +56,8 @@ const Chat = () => {
                     overflowY: "auto",
                 }}
             >
-                {(mensajes || []).map((m, i) => (
-                    <div key={i} className="chat-message">
+                {(messages || []).map((m, i) => (
+                    <div key={`${i}-${m}`} className="chat-message">
                         {m}
                     </div>
                 ))}
@@ -68,10 +68,10 @@ const Chat = () => {
                     className="chat-input"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     placeholder="Escribí algo..."
                 />
-                <button className="chat-button" onClick={enviar}>
+                <button className="chat-button" onClick={sendMessage}>
                     Enviar
                 </button>
             </div>

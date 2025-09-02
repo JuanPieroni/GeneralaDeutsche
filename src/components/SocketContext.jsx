@@ -15,17 +15,22 @@ export const SocketProvider = ({ children }) => {
             timeout: 20000,
         })
 
-        newSocket.on("connect", () => {
+        const handleConnect = () => {
             console.log("🎉 Conectado al socket con ID:", newSocket.id)
-        })
+        }
 
-        newSocket.on("connect_error", (err) => {
+        const handleConnectError = (err) => {
             console.error("❌ Error de conexión:", err)
-        })
+        }
+
+        newSocket.on("connect", handleConnect)
+        newSocket.on("connect_error", handleConnectError)
 
         setSocket(newSocket)
 
         return () => {
+            newSocket.off("connect", handleConnect)
+            newSocket.off("connect_error", handleConnectError)
             newSocket.disconnect()
         }
     }, [])

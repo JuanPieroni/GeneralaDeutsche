@@ -58,21 +58,14 @@ const DiceRoller = ({
     // Si no tenemos playerRole aún, permitir que ambos botones funcionen temporalmente
     const isMyTurn = playerRole ? playerRole === turnoActual : true
 
-    console.log(
-        "DiceRoller - playerRole:",
-        playerRole,
-        "turnoActual:",
-        turnoActual,
-        "isMyTurn:",
-        isMyTurn
-    )
+
 
     const startShakeSound = () => {
         setIsShaking(true)
         if (shakeAudioRef.current) {
             shakeAudioRef.current.currentTime = 0
             shakeAudioRef.current.loop = true
-            shakeAudioRef.current.play()
+            shakeAudioRef.current.play().catch(() => {})
         }
     }
 
@@ -87,7 +80,7 @@ const DiceRoller = ({
     const playRollSound = () => {
         if (rollAudioRef.current) {
             rollAudioRef.current.currentTime = 0
-            rollAudioRef.current.play()
+            rollAudioRef.current.play().catch(() => {})
         }
     }
 
@@ -143,7 +136,7 @@ const DiceRoller = ({
             <div>
                 <audio ref={shakeAudioRef} preload="auto">
                     <source
-                        src="/sounds/shake.mp3"
+                        src="sounds/shake.mp3"
                         type="audio/mpeg"
                     />
                 </audio>

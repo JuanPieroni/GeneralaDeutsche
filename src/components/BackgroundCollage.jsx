@@ -29,7 +29,7 @@ return (
     <div className="background-collage">
       {images.map((src, i) => (
         <div
-          key={i}
+          key={src}
           className="bg-image"
           style={{ backgroundImage: `url(${src})` }}
         />

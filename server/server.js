@@ -86,8 +86,13 @@ io.on("connection", (socket) => {
             return // Unauthorized
         }
         
-        console.log("💬 Mensaje recibido:", msg)
         gameState.chat.push(msg)
+        
+        // Limitar chat a 50 mensajes máximo para evitar memory leaks
+        if (gameState.chat.length > 50) {
+            gameState.chat = gameState.chat.slice(-50)
+        }
+        
         io.emit("chat-message", msg)
     })
     // board
