@@ -19,7 +19,7 @@ const categories = [
 
 const columns = ["1", "2", "3"]
 
-const Board = ({ turnoActual, onResetBoard }) => {
+const Board = ({ turnoActual, onResetBoard, playerRole, players }) => {
     const socket = useSocket()
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
@@ -33,7 +33,6 @@ const Board = ({ turnoActual, onResetBoard }) => {
         }
 
         const handleBoardUpdate = (updatedCell) => {
-            console.log("Recibido update-board:", updatedCell)
             setScores((prev) => ({
                 ...prev,
                 ...updatedCell,
@@ -41,7 +40,6 @@ const Board = ({ turnoActual, onResetBoard }) => {
         }
 
         const handleBlackoutUpdate = (updatedBlackout) => {
-            console.log("Recibido update-board-blackout:", updatedBlackout)
             setBlackedOut((prev) => ({
                 ...prev,
                 ...updatedBlackout,
@@ -49,7 +47,6 @@ const Board = ({ turnoActual, onResetBoard }) => {
         }
 
         const handleResetBoard = () => {
-            console.log("Recibido reset-board del servidor")
             setScores({})
             setBlackedOut({})
         }
@@ -68,7 +65,6 @@ const Board = ({ turnoActual, onResetBoard }) => {
     }, [socket])
 
     const handleInputChange = (col, row, player, value) => {
-        console.log(socket.connected, "escribiendo...")
         const key = `${col}-${row}-${player}`
         setScores((prev) => ({
             ...prev,
@@ -85,12 +81,9 @@ const Board = ({ turnoActual, onResetBoard }) => {
                 ...prev,
                 [key]: !prev[key],
             }
-            console.log("Emitiendo blackoutt:", { [key]: newState[key] }) // <- Asegurate de tener este log para debug
-            // Emitir al servidor
             if (socket) {
                 socket.emit("update-board-blackout", { [key]: newState[key] })
             }
-
             return newState
         })
     }
@@ -133,6 +126,13 @@ const Board = ({ turnoActual, onResetBoard }) => {
     return (
         <div className="board">
             <div className="board-controls">
+                <div style={{ marginBottom: '10px', textAlign: 'center' }}>
+                    <span style={{ fontSize: '14px', color: '#666' }}>
+                        Eres: <strong>{playerRole === 'jugador1' ? 'TOP' : playerRole === 'jugador2' ? 'BOTTOM' : 'Esperando...'}</strong>
+                        {playerRole && ` | Turno: ${turnoActual === 'jugador1' ? 'TOP' : 'BOTTOM'}`}
+                        {playerRole === turnoActual && ' (Tu turno)'}
+                    </span>
+                </div>
                 <button onClick={resetBoard} className="reset-button">
                     🗑️ Limpiar Tablero
                 </button>

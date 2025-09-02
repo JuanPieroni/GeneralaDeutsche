@@ -97,20 +97,22 @@ io.on("connection", (socket) => {
     })
     // board
     socket.on("update-board", (boardState) => {
-        console.log("🛠️ Server recibió update-board:", boardState)
         gameState.board = { ...gameState.board, ...boardState }
         io.emit("update-board", boardState)
     })
     // blackout (pintar celdas)
     socket.on("update-board-blackout", (blackoutState) => {
-        console.log("🟥 Server recibió update-board-blackout:", blackoutState)
         gameState.blackout = { ...gameState.blackout, ...blackoutState }
         io.emit("update-board-blackout", blackoutState)
     })
 
     // diceroller
     socket.on("update-diceroller", (diceState) => {
-        console.log("🟢 Server recibió update-diceroller:", JSON.stringify(diceState))
+        const player = gameState.players[socket.id]
+        if (!player || player.role !== gameState.dice.turnoActual) {
+            return // No es su turno
+        }
+        
         gameState.dice = { ...gameState.dice, ...diceState }
         io.emit("update-diceroller", diceState)
     })

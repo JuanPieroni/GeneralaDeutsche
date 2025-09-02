@@ -21,6 +21,8 @@ const App = () => {
     const [heldDice, setHeldDice] = useState(INITIAL_HELD)
     const [throwsLeft, setThrowsLeft] = useState(MAX_THROWS)
     const [rollCount, setRollCount] = useState(0)
+    const [playerRole, setPlayerRole] = useState(null)
+    const [players, setPlayers] = useState({})
 
     useEffect(() => {
         if (!socket) return
@@ -37,6 +39,21 @@ const App = () => {
                 setRollCount(gameState.dice.rollCount)
                 setTurnoActual(gameState.dice.turnoActual)
             }
+            if (gameState.players) {
+                setPlayers(gameState.players)
+                const myPlayer = gameState.players[socket.id]
+                if (myPlayer) {
+                    setPlayerRole(myPlayer.role)
+                }
+            }
+        }
+
+        const handlePlayerAssigned = ({ role }) => {
+            setPlayerRole(role)
+        }
+
+        const handlePlayersUpdate = (updatedPlayers) => {
+            setPlayers(updatedPlayers)
         }
 
         const handleDiceUpdate = (diceState) => {
@@ -59,17 +76,21 @@ const App = () => {
         socket.on("game-state", handleGameState)
         socket.on("update-diceroller", handleDiceUpdate)
         socket.on("update-turn", handleTurnUpdate)
+        socket.on("player-assigned", handlePlayerAssigned)
+        socket.on("players-update", handlePlayersUpdate)
 
         return () => {
             socket.off("game-state", handleGameState)
             socket.off("update-diceroller", handleDiceUpdate)
             socket.off("update-turn", handleTurnUpdate)
+            socket.off("player-assigned", handlePlayerAssigned)
+            socket.off("players-update", handlePlayersUpdate)
             socket.off("connect", handleConnect)
         }
     }, [socket])
 
     const tirarDados = useCallback(() => {
-        if (throwsLeft === 0) return
+        if (throwsLeft === 0 || playerRole !== turnoActual) return
         const newDice = dice.map((d, i) =>
             heldDice[i] ? d : Math.floor(Math.random() * 6) + 1
         )
@@ -92,6 +113,7 @@ const App = () => {
     }, [throwsLeft, dice, heldDice, rollCount, socket])
 
     const toggleHold = useCallback((index) => {
+        if (playerRole !== turnoActual) return
         setHeldDice((prev) => {
             const copy = [...prev]
             copy[index] = !copy[index]
@@ -110,6 +132,7 @@ const App = () => {
     }, [dice, throwsLeft, rollCount, socket])
 
     const terminarTurno = useCallback(() => {
+        if (playerRole !== turnoActual) return
         const nuevoTurno = turnoActual === "jugador1" ? "jugador2" : "jugador1"
         setTurnoActual(nuevoTurno)
         setThrowsLeft(MAX_THROWS)
@@ -126,7 +149,7 @@ const App = () => {
                 rollCount: 0,
             })
         }
-    }, [turnoActual, socket])
+    }, [turnoActual, playerRole, socket])
 
     return (
         <>
@@ -137,7 +160,7 @@ const App = () => {
                     className="board-container"
                     style={{ maxWidth: 600, margin: "auto", padding: "1rem" }}
                 >
-                    <Board turnoActual={turnoActual} />
+                    <Board turnoActual={turnoActual} playerRole={playerRole} players={players} />
                     <DiceRoller
                         dice={dice}
                         heldDice={heldDice}
