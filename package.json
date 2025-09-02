@@ -12,7 +12,7 @@
     },
     "dependencies": {
         "cors": "^2.8.5",
-        "express": "^5.1.0",
+        "express": "^4.19.2",
         "framer-motion": "^12.23.9",
         "howler": "^2.2.4",
         "lucide-react": "^0.536.0",
