@@ -1,8 +1,6 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import "./Board.css"
 import { useSocket } from "./SocketContext"
-import { useEffect } from "react"
-import Swal from "sweetalert2"
 
 const categories = [
     "1",
@@ -19,7 +17,7 @@ const categories = [
 
 const columns = ["1", "2", "3"]
 
-const Board = React.memo(({ onResetBoard }) => {
+const Board = React.memo(() => {
     const socket = useSocket()
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
@@ -96,40 +94,8 @@ const Board = React.memo(({ onResetBoard }) => {
         toggleBlack(col, row, targetPlayer)
     }
 
-    const resetBoard = () => {
-        Swal.fire({
-            title: "¿Borrar Puntajes?",
-            text: "Se borrarán todos los puntajes del tablero",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#dd0000",
-            cancelButtonColor: "#666666",
-            confirmButtonText: "Sí, borrar",
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                setScores({})
-                setBlackedOut({})
-                if (socket) {
-                    socket.emit("reset-board")
-                }
-                if (onResetBoard) onResetBoard()
-                Swal.fire(
-                    "Listo!!",
-                    "El tablero ha sido borrado para una nueva partida",
-                    "success"
-                )
-            }
-        })
-    }
-
     return (
         <div className="board" style={{ display: 'block', minHeight: '300px' }}>
-            <div className="board-controls" style={{ display: 'block' }}>
-                <button onClick={resetBoard} className="reset-button">
-                    🗑️ Limpiar Tablero
-                </button>
-            </div>
             <table style={{ display: 'table', width: '100%' }}>
                 <thead>
                     <tr className="tr-head">

@@ -114,21 +114,13 @@ h1 {
     .app-container {
         flex-direction: row;
         align-items: flex-start;
-        gap: 3rem;
+        gap: 2rem;
     }
 
     .board-container {
         flex: 2;
         max-width: none;
         margin: 0;
-    }
-
-    .chat-container {
-        flex: 1;
-        min-width: 350px;
-        max-width: 400px;
-        height: fit-content;
-        min-height: 600px;
     }
 
     h1::before,

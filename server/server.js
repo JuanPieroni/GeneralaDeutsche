@@ -59,8 +59,9 @@ io.on("connection", (socket) => {
     socket.on("set-player", (playerName) => {
         const playerCount = Object.keys(gameState.players).length
         const playerRole = playerCount === 0 ? "jugador1" : "jugador2"
+        const displayName = playerRole === "jugador1" ? "TOP" : "BOTTOM"
 
-        gameState.players[socket.id] = { name: playerName, role: playerRole }
+        gameState.players[socket.id] = { name: displayName, role: playerRole }
 
         socket.emit("player-assigned", { role: playerRole, name: playerName, currentTurn: gameState.currentTurn })
         io.emit("players-update", gameState.players)

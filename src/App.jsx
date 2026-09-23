@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react"
 import Board from "./components/Board"
 import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
+import Swal from "sweetalert2"
 import "./App.css"
 import "./styles/globals.css"
 import { useSocket } from "./components/SocketContext"
@@ -132,6 +133,24 @@ const App = () => {
         socket.emit("update-diceroller", payload)
     }, [socket])
 
+    const resetBoard = useCallback(() => {
+        Swal.fire({
+            title: "¿Borrar Puntajes?",
+            text: "Se borrarán todos los puntajes del tablero",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dd0000",
+            cancelButtonColor: "#666666",
+            confirmButtonText: "Sí, borrar",
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.isConfirmed && socket) {
+                socket.emit("reset-board")
+                Swal.fire("Listo!!", "El tablero ha sido borrado para una nueva partida", "success")
+            }
+        })
+    }, [socket])
+
     return (
         <>
             <h1 style={{ fontSize: "2rem", textAlign: "center", margin: "1rem 0", display: "block" }}>
@@ -159,6 +178,11 @@ const App = () => {
                 </div>
                 <div>
                     <Chat />
+                    <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                        <button onClick={resetBoard} className="reset-button">
+                            🗑️ Limpiar Tablero
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
