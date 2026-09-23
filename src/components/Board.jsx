@@ -19,7 +19,7 @@ const categories = [
 
 const columns = ["1", "2", "3"]
 
-const Board = ({ onResetBoard }) => {
+const Board = React.memo(({ onResetBoard }) => {
     const socket = useSocket()
     const [scores, setScores] = useState({})
     const [blackedOut, setBlackedOut] = useState({})
@@ -221,6 +221,6 @@ const Board = ({ onResetBoard }) => {
             </table>
         </div>
     )
-}
+})
 
 export default Board

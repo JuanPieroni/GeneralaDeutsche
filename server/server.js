@@ -17,64 +17,52 @@ const allowedOrigins = [
     "https://generaladeutsche.onrender.com",
 ]
 
-app.use(cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    credentials: true,
-}))
-
+app.use(cors({ origin: allowedOrigins, methods: ["GET", "POST"], credentials: true }))
 app.use(express.static(path.join(__dirname, "../dist")))
-
-app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/socket.io')) return next()
-    res.sendFile(path.join(__dirname, '../dist/index.html'))
+app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/socket.io")) return next()
+    res.sendFile(path.join(__dirname, "../dist/index.html"))
 })
 
-// inicializamos socket.io
 const io = new Server(httpServer, {
-    cors: {
-        origin: allowedOrigins,
-        methods: ["GET", "POST"],
-        credentials: true,
-    },
+    cors: { origin: allowedOrigins, methods: ["GET", "POST"], credentials: true },
 })
 
-// Estado global del juego
+const INITIAL_DICE = {
+    dice: [0, 0, 0, 0, 0],
+    heldDice: [false, false, false, false, false],
+    throwsLeft: 3,
+    rollCount: 0,
+}
+
 const gameState = {
     board: {},
     blackout: {},
-    dice: {
-        dice: [0, 0, 0, 0, 0],
-        heldDice: [false, false, false, false, false],
-        throwsLeft: 3,
-        rollCount: 0,
-    },
+    dice: { ...INITIAL_DICE },
     chat: [],
     players: {},
+    currentTurn: "jugador1", // quién puede tirar dados
 }
 
-// escucha de sockets
 io.on("connection", (socket) => {
     console.log("✅ Usuario conectado:", socket.id)
 
-    // Enviar estado actual al nuevo cliente
     socket.emit("game-state", {
         board: gameState.board,
         blackout: gameState.blackout,
         dice: gameState.dice,
-        players: gameState.players
+        chat: gameState.chat,
+        players: gameState.players,
+        currentTurn: gameState.currentTurn,
     })
 
     socket.on("set-player", (playerName) => {
         const playerCount = Object.keys(gameState.players).length
         const playerRole = playerCount === 0 ? "jugador1" : "jugador2"
 
-        gameState.players[socket.id] = {
-            name: playerName,
-            role: playerRole,
-        }
+        gameState.players[socket.id] = { name: playerName, role: playerRole }
 
-        socket.emit("player-assigned", { role: playerRole, name: playerName })
+        socket.emit("player-assigned", { role: playerRole, name: playerName, currentTurn: gameState.currentTurn })
         io.emit("players-update", gameState.players)
     })
 
@@ -84,37 +72,51 @@ io.on("connection", (socket) => {
 
         const fullMsg = `${player.name}: ${msg}`
         gameState.chat.push(fullMsg)
-
-        if (gameState.chat.length > 50) {
-            gameState.chat = gameState.chat.slice(-50)
-        }
+        if (gameState.chat.length > 50) gameState.chat = gameState.chat.slice(-50)
 
         io.emit("chat-message", fullMsg)
     })
-    // board
+
     socket.on("update-board", (boardState) => {
         gameState.board = { ...gameState.board, ...boardState }
-        io.emit("update-board", boardState)
+        socket.broadcast.emit("update-board", boardState)
     })
-    // blackout (pintar celdas)
+
     socket.on("update-board-blackout", (blackoutState) => {
         gameState.blackout = { ...gameState.blackout, ...blackoutState }
-        io.emit("update-board-blackout", blackoutState)
+        socket.broadcast.emit("update-board-blackout", blackoutState)
     })
 
-    // diceroller
+    // Solo el jugador con el turno activo puede actualizar dados
     socket.on("update-diceroller", (diceState) => {
+        const player = gameState.players[socket.id]
+        if (!player || player.role !== gameState.currentTurn) return
+
         gameState.dice = { ...gameState.dice, ...diceState }
-        io.emit("update-diceroller", diceState)
+        // broadcast: el oponente ve los dados en tiempo real, el emisor ya los tiene localmente
+        socket.broadcast.emit("update-diceroller", diceState)
     })
 
+    // El jugador con turno activo pasa el turno al terminar su jugada
+    socket.on("end-turn", () => {
+        const player = gameState.players[socket.id]
+        if (!player || player.role !== gameState.currentTurn) return
 
+        gameState.currentTurn = gameState.currentTurn === "jugador1" ? "jugador2" : "jugador1"
+        gameState.dice = { ...INITIAL_DICE }
+
+        io.emit("turn-update", gameState.currentTurn)
+        io.emit("update-diceroller", gameState.dice)
+    })
 
     socket.on("reset-board", () => {
-        console.log("🗑️ Server recibió reset-board")
         gameState.board = {}
         gameState.blackout = {}
+        gameState.dice = { ...INITIAL_DICE }
+        gameState.currentTurn = "jugador1"
         io.emit("reset-board")
+        io.emit("turn-update", gameState.currentTurn)
+        io.emit("update-diceroller", gameState.dice)
     })
 
     socket.on("disconnect", () => {
@@ -123,7 +125,6 @@ io.on("connection", (socket) => {
     })
 })
 
-// levantamos el servidor
 const PORT = process.env.PORT || 3000
 httpServer.listen(PORT, () => {
     console.log(`🚀 Backend corriendo en http://localhost:${PORT}`)

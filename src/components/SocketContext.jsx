@@ -8,7 +8,7 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null)
 
     useEffect(() => {
-        const url = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000"
+        const url = import.meta.env.VITE_SOCKET_URL || window.location.origin
         const newSocket = io(url, {
             transports: ["websocket"],
             reconnectionAttempts: 5,
