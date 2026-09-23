@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     cssMinify: true,
-    minify: 'terser',
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         manualChunks: {

@@ -8,32 +8,27 @@ import { fileURLToPath } from "url"
 const app = express()
 const httpServer = createServer(app)
 
-// 🟡 Resolver __dirname en ESModules
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// 🟢 Middleware para servir el build de React
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://generaladeutsche.netlify.app",
+    "https://generaladeutsche.onrender.com",
+]
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+}))
+
 app.use(express.static(path.join(__dirname, "../dist")))
 
-// Catch all handler: send back React's index.html file for any non-API routes
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/socket.io')) return next()
     res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
-
-// 🟣 Allowed origins (dev + futuro deploy)
-const allowedOrigins = [
-    "http://localhost:5173", // desarrollo local
-    "https://generaladeutsche.netlify.app",
-    "https://generaladeutsche.onrender.com",  
-]
-// ⚠️ CORS para permitir desde el frontend
-app.use(
-    cors({
-        origin: allowedOrigins,
-        methods: ["GET", "POST"],
-        credentials: true,
-    })
-)
 
 // inicializamos socket.io
 const io = new Server(httpServer, {
@@ -85,18 +80,16 @@ io.on("connection", (socket) => {
 
     socket.on("chat-message", (msg) => {
         const player = gameState.players[socket.id]
-        if (!player) {
-            return // Unauthorized
-        }
-        
-        gameState.chat.push(msg)
-        
-        // Limitar chat a 50 mensajes máximo para evitar memory leaks
+        if (!player) return
+
+        const fullMsg = `${player.name}: ${msg}`
+        gameState.chat.push(fullMsg)
+
         if (gameState.chat.length > 50) {
             gameState.chat = gameState.chat.slice(-50)
         }
-        
-        io.emit("chat-message", msg)
+
+        io.emit("chat-message", fullMsg)
     })
     // board
     socket.on("update-board", (boardState) => {
