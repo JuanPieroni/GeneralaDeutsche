@@ -27,7 +27,8 @@ const App = () => {
         if (!socket) return
 
         const handleConnect = () => {
-            socket.emit("set-player", `Jugador-${socket.id.slice(-4)}`)
+            const savedRole = localStorage.getItem("generala-role")
+            socket.emit("set-player", `Jugador-${socket.id.slice(-4)}`, savedRole)
         }
 
         const handleGameState = (state) => {
@@ -42,6 +43,7 @@ const App = () => {
 
         const handlePlayerAssigned = ({ role, currentTurn: turn }) => {
             setMyRole(role)
+            localStorage.setItem("generala-role", role)
             if (turn) setCurrentTurn(turn)
         }
 

@@ -56,9 +56,14 @@ io.on("connection", (socket) => {
         currentTurn: gameState.currentTurn,
     })
 
-    socket.on("set-player", (playerName) => {
+    socket.on("set-player", (playerName, preferredRole) => {
         const roles = Object.values(gameState.players).map(p => p.role)
-        const playerRole = roles.includes("jugador1") ? "jugador2" : "jugador1"
+        let playerRole
+        if (preferredRole && !roles.includes(preferredRole)) {
+            playerRole = preferredRole
+        } else {
+            playerRole = roles.includes("jugador1") ? "jugador2" : "jugador1"
+        }
         const displayName = playerRole === "jugador1" ? "TOP" : "BOTTOM"
 
         gameState.players[socket.id] = { name: displayName, role: playerRole }
