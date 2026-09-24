@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import "./DiceRoller.css"
 
@@ -24,8 +24,16 @@ const DiceRoller = ({
     onEndTurn,
 }) => {
     const [isShaking, setIsShaking] = useState(false)
+    const [rollingDice, setRollingDice] = useState(dice.map(() => false))
     const shakeAudioRef = useRef(null)
     const rollAudioRef = useRef(null)
+    const diceRotateRef = useRef(dice.map(() => 0))
+
+    useEffect(() => {
+        if (!isMyTurn && rollCount > 0) {
+            setRollingDice(dice.map((_, i) => !heldDice[i]))
+        }
+    }, [rollCount])
 
     const startShakeSound = () => {
         if (!isMyTurn) return
@@ -56,6 +64,7 @@ const DiceRoller = ({
         stopShakeSound()
         if (!isMyTurn) return
         playRollSound()
+        setRollingDice(dice.map((_, i) => !heldDice[i]))
         tirarDados()
     }
 
@@ -88,7 +97,7 @@ const DiceRoller = ({
                 {dice.map((num, idx) => (
                     <motion.div
                         layout
-                        key={heldDice[idx] ? `held-${idx}` : `dice-${idx}-${rollCount}`}
+                        key={`dice-${idx}`}
                         className={heldDice[idx] ? "die held" : "die"}
                         onClick={() => toggleHold(idx)}
                         title={
@@ -99,23 +108,34 @@ const DiceRoller = ({
                                 : "Click para retener dado"
                         }
                         style={{ opacity: !isMyTurn && !heldDice[idx] ? 0.7 : 1 }}
-                        initial={heldDice[idx] ? false : { scale: 1.2, rotate: -2800, opacity: 0 }}
-                        animate={
-                            heldDice[idx]
-                                ? false
-                                : isShaking
-                                ? { scale: 1, rotate: 3600, opacity: 0.3, filter: "brightness(2)" }
-                                : { scale: 1, rotate: 0, opacity: 1 }
-                        }
+                        initial={false}
+                        animate={(() => {
+                            if (!heldDice[idx]) {
+                                diceRotateRef.current[idx] = rollCount * 360
+                            }
+                            const r = diceRotateRef.current[idx]
+                            if (heldDice[idx]) return { scale: 1, rotate: r, opacity: 1 }
+                            if (isShaking) return { scale: 1, rotate: r + 3600, opacity: 0.3, filter: "brightness(2)" }
+                            return { scale: 1, rotate: r, opacity: 1 }
+                        })()}
+                        onAnimationComplete={() => {
+                            setRollingDice(prev => {
+                                const next = [...prev]
+                                next[idx] = false
+                                return next
+                            })
+                        }}
                         transition={{
                             type: "spring",
-                            stiffness: 300,
-                            damping: heldDice[idx] ? 15 : 10,
-                            delay: heldDice[idx] ? idx * 0.5 : idx * 0.3,
-                            duration: 0.4,
+                            stiffness: 500,
+                            damping:50,
+                            delay: idx * 0.1,
+                            duration: 0.1,
+                             
+                           
                         }}
                     >
-                        <DieFace value={num} />
+                        <DieFace value={rollingDice[idx] ? 0 : num} />
                     </motion.div>
                 ))}
             </div>
