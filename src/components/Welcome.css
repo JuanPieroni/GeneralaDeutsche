@@ -1,15 +1,55 @@
 .welcome-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.92);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    overflow: hidden;
+}
+
+.welcome-video-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.welcome-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.welcome-mute-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid #ffce00;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.welcome-mute-btn:hover {
+    background: rgba(255, 206, 0, 0.2);
 }
 
 .welcome-box {
-    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    position: relative;
+    z-index: 2;
+    background: rgba(10, 10, 10, 0.75);
     border: 3px solid #ffce00;
     border-radius: 20px;
     padding: 2.5rem 3rem;
@@ -20,10 +60,7 @@
     box-shadow: 0 0 40px rgba(255, 206, 0, 0.3), 0 0 80px rgba(0, 0, 0, 0.8);
     max-width: 420px;
     width: 90%;
-}
-
-.welcome-eagle {
-    font-size: 3rem;
+    backdrop-filter: blur(6px);
 }
 
 .welcome-title {
@@ -36,9 +73,18 @@
     animation: glow 3s ease-in-out infinite alternate;
 }
 
+@keyframes glow {
+    from {
+        text-shadow: 2px 2px 0 #000, 4px 4px 0 #dd0000, 0 0 20px #ffce00;
+    }
+    to {
+        text-shadow: 2px 2px 0 #000, 4px 4px 0 #dd0000, 0 0 40px #ffce00, 0 0 60px #ffce00;
+    }
+}
+
 .welcome-subtitle {
     font-family: "Germania One", serif;
-    color: #aaa;
+    color: #ccc;
     font-size: 1rem;
     letter-spacing: 2px;
 }
@@ -56,7 +102,7 @@
     font-size: 1rem;
     border-radius: 8px;
     border: 2px solid #ffce00;
-    background: #111;
+    background: rgba(0,0,0,0.6);
     color: #fff;
     text-align: center;
     font-family: "Germania One", serif;
@@ -65,7 +111,7 @@
 }
 
 .welcome-input::placeholder {
-    color: #555;
+    color: #666;
 }
 
 .welcome-input:focus {
