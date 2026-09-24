@@ -13,7 +13,6 @@
     --beer-foam: #f5f5dc;
     --forest-green: #228b22;
     --alpine-blue: #4682b4;
-    background-color: #e9e1d6b6;
 }
 
 /* Reset y base */
@@ -79,30 +78,7 @@ h1 {
     position: relative;
 }
 
-/* Decoración esquinas del board */
-.board-container::before,
-.board-container::after {
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: var(--german-gold);
-    border: 2px solid var(--german-black);
-}
 
-.board-container::before {
-    top: -2px;
-    left: -2px;
-    border-radius: 0 0 20px 0;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-}
-
-.board-container::after {
-    bottom: -2px;
-    right: -2px;
-    border-radius: 20px 0 0 0;
-    clip-path: polygon(100% 0, 100% 100%, 0 100%);
-}
 
  
 

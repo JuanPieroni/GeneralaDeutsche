@@ -217,8 +217,8 @@ const App = () => {
                     )}
                     <Chat playerName={playerName} />
                     {!isSpectator && (
-                        <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                            <button onClick={resetBoard} className="reset-button">
+                        <div style={{ width: 320, textAlign: "center" }}>
+                            <button onClick={resetBoard} className="reset-button" style={{ width: "100%" }}>
                                 🗑️ Limpiar Tablero
                             </button>
                         </div>
