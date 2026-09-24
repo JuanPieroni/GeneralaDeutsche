@@ -58,6 +58,17 @@ io.on("connection", (socket) => {
 
     socket.on("set-player", (playerName, preferredRole) => {
         const roles = Object.values(gameState.players).map(p => p.role)
+
+        // Cancelar timer de gracia si el jugador se reconecta con el mismo nombre y rol
+        const existing = Object.entries(gameState.players).find(
+            ([, p]) => p.name === playerName && p.role === preferredRole && p._disconnectTimer
+        )
+        if (existing) {
+            const [oldId, oldPlayer] = existing
+            clearTimeout(oldPlayer._disconnectTimer)
+            delete gameState.players[oldId]
+        }
+
         const activePlayers = roles.filter(r => r === "jugador1" || r === "jugador2")
 
         if (activePlayers.length >= 2 && (!preferredRole || roles.includes(preferredRole))) {
@@ -140,8 +151,13 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", () => {
-        delete gameState.players[socket.id]
-        io.emit("players-update", gameState.players)
+        const player = gameState.players[socket.id]
+        if (!player) return
+
+        player._disconnectTimer = setTimeout(() => {
+            delete gameState.players[socket.id]
+            io.emit("players-update", gameState.players)
+        }, 30000)
     })
 })
 

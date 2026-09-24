@@ -1,0 +1,256 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="monospace, sans-serif">
+
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#0d0d0d"/>
+
+  <!-- Title -->
+  <text x="600" y="38" text-anchor="middle" fill="#ffce00" font-size="22" font-weight="bold" font-family="Georgia, serif">GENERALA ALEMANA — Arquitectura de la App</text>
+  <line x1="80" y1="48" x2="1120" y2="48" stroke="#ffce00" stroke-width="1" opacity="0.4"/>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ZONA: BROWSER / CLIENTE -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="30" y="60" width="720" height="810" rx="14" fill="#111" stroke="#4682b4" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="390" y="82" text-anchor="middle" fill="#4682b4" font-size="13" font-weight="bold">🖥  CLIENTE (Browser)</text>
+
+  <!-- localStorage -->
+  <rect x="50" y="92" width="200" height="64" rx="8" fill="#1a1a2e" stroke="#888" stroke-width="1.5"/>
+  <text x="150" y="112" text-anchor="middle" fill="#aaa" font-size="11" font-weight="bold">localStorage</text>
+  <text x="150" y="128" text-anchor="middle" fill="#ccc" font-size="10">generala-name</text>
+  <text x="150" y="142" text-anchor="middle" fill="#ccc" font-size="10">generala-role</text>
+
+  <!-- main.jsx -->
+  <rect x="290" y="92" width="140" height="44" rx="8" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
+  <text x="360" y="112" text-anchor="middle" fill="#ddd" font-size="11" font-weight="bold">main.jsx</text>
+  <text x="360" y="128" text-anchor="middle" fill="#888" font-size="10">createRoot → render</text>
+
+  <!-- SocketProvider -->
+  <rect x="470" y="92" width="160" height="44" rx="8" fill="#1a2a1a" stroke="#228b22" stroke-width="1.5"/>
+  <text x="550" y="112" text-anchor="middle" fill="#90ee90" font-size="11" font-weight="bold">SocketProvider</text>
+  <text x="550" y="128" text-anchor="middle" fill="#888" font-size="10">io() → socket instance</text>
+
+  <!-- Arrow main → SocketProvider -->
+  <line x1="430" y1="114" x2="468" y2="114" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- App.jsx box -->
+  <rect x="50" y="185" width="680" height="200" rx="10" fill="#161616" stroke="#ffce00" stroke-width="2"/>
+  <text x="390" y="205" text-anchor="middle" fill="#ffce00" font-size="13" font-weight="bold">App.jsx — Estado central</text>
+
+  <!-- State vars inside App -->
+  <rect x="65" y="215" width="200" height="155" rx="6" fill="#1c1c1c" stroke="#444" stroke-width="1"/>
+  <text x="165" y="232" text-anchor="middle" fill="#aaa" font-size="10" font-weight="bold">useState</text>
+  <text x="165" y="248" text-anchor="middle" fill="#ccc" font-size="9.5">dice / heldDice</text>
+  <text x="165" y="262" text-anchor="middle" fill="#ccc" font-size="9.5">throwsLeft / rollCount</text>
+  <text x="165" y="276" text-anchor="middle" fill="#ccc" font-size="9.5">myRole / currentTurn</text>
+  <text x="165" y="290" text-anchor="middle" fill="#ccc" font-size="9.5">playerName / hasEntered</text>
+  <text x="165" y="304" text-anchor="middle" fill="#ccc" font-size="9.5">isLoading</text>
+  <text x="165" y="322" text-anchor="middle" fill="#aaa" font-size="10" font-weight="bold">callbacks</text>
+  <text x="165" y="338" text-anchor="middle" fill="#ccc" font-size="9.5">tirarDados / toggleHold</text>
+  <text x="165" y="352" text-anchor="middle" fill="#ccc" font-size="9.5">endTurn / resetBoard</text>
+  <text x="165" y="366" text-anchor="middle" fill="#ccc" font-size="9.5">handleEnter</text>
+
+  <!-- useEffect block -->
+  <rect x="280" y="215" width="200" height="155" rx="6" fill="#1c1c1c" stroke="#444" stroke-width="1"/>
+  <text x="380" y="232" text-anchor="middle" fill="#aaa" font-size="10" font-weight="bold">useEffect (socket)</text>
+  <text x="380" y="250" text-anchor="middle" fill="#90ee90" font-size="9">← game-state</text>
+  <text x="380" y="264" text-anchor="middle" fill="#90ee90" font-size="9">← player-assigned</text>
+  <text x="380" y="278" text-anchor="middle" fill="#90ee90" font-size="9">← update-diceroller</text>
+  <text x="380" y="292" text-anchor="middle" fill="#90ee90" font-size="9">← turn-update</text>
+  <text x="380" y="312" text-anchor="middle" fill="#aaa" font-size="10" font-weight="bold">auto-rejoin</text>
+  <text x="380" y="328" text-anchor="middle" fill="#ccc" font-size="9">localStorage → set-player</text>
+  <text x="380" y="342" text-anchor="middle" fill="#ccc" font-size="9">si name+role guardados</text>
+  <text x="380" y="356" text-anchor="middle" fill="#ccc" font-size="9">→ salta Welcome</text>
+
+  <!-- emit block -->
+  <rect x="495" y="215" width="220" height="155" rx="6" fill="#1c1c1c" stroke="#444" stroke-width="1"/>
+  <text x="605" y="232" text-anchor="middle" fill="#aaa" font-size="10" font-weight="bold">socket.emit</text>
+  <text x="605" y="250" text-anchor="middle" fill="#f4a460" font-size="9">→ set-player</text>
+  <text x="605" y="264" text-anchor="middle" fill="#f4a460" font-size="9">→ update-diceroller</text>
+  <text x="605" y="278" text-anchor="middle" fill="#f4a460" font-size="9">→ end-turn</text>
+  <text x="605" y="292" text-anchor="middle" fill="#f4a460" font-size="9">→ reset-board</text>
+  <text x="605" y="306" text-anchor="middle" fill="#f4a460" font-size="9">→ update-board</text>
+  <text x="605" y="320" text-anchor="middle" fill="#f4a460" font-size="9">→ update-board-blackout</text>
+  <text x="605" y="334" text-anchor="middle" fill="#f4a460" font-size="9">→ chat-message</text>
+  <text x="605" y="348" text-anchor="middle" fill="#f4a460" font-size="9">→ clear-chat</text>
+
+  <!-- Arrow localStorage ↔ App -->
+  <line x1="150" y1="156" x2="150" y2="183" stroke="#888" stroke-width="1.5" marker-end="url(#arr)" marker-start="url(#arrrev)"/>
+
+  <!-- Arrow SocketProvider → App useEffect -->
+  <line x1="550" y1="136" x2="550" y2="183" stroke="#228b22" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- COMPONENTES HIJOS -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- Welcome -->
+  <rect x="50" y="420" width="150" height="80" rx="8" fill="#1a1010" stroke="#dd0000" stroke-width="1.5"/>
+  <text x="125" y="442" text-anchor="middle" fill="#ff6666" font-size="11" font-weight="bold">Welcome.jsx</text>
+  <text x="125" y="458" text-anchor="middle" fill="#ccc" font-size="9">input nombre</text>
+  <text x="125" y="472" text-anchor="middle" fill="#ccc" font-size="9">video bg + audio</text>
+  <text x="125" y="486" text-anchor="middle" fill="#f4a460" font-size="9">→ onEnter(name)</text>
+
+  <!-- Board -->
+  <rect x="220" y="420" width="150" height="80" rx="8" fill="#101a10" stroke="#228b22" stroke-width="1.5"/>
+  <text x="295" y="442" text-anchor="middle" fill="#90ee90" font-size="11" font-weight="bold">Board.jsx</text>
+  <text x="295" y="458" text-anchor="middle" fill="#ccc" font-size="9">scores / blackedOut</text>
+  <text x="295" y="472" text-anchor="middle" fill="#90ee90" font-size="9">← game-state</text>
+  <text x="295" y="486" text-anchor="middle" fill="#f4a460" font-size="9">→ update-board(-blackout)</text>
+
+  <!-- DiceRoller -->
+  <rect x="390" y="420" width="160" height="80" rx="8" fill="#1a1510" stroke="#f4a460" stroke-width="1.5"/>
+  <text x="470" y="442" text-anchor="middle" fill="#f4a460" font-size="11" font-weight="bold">DiceRoller.jsx</text>
+  <text x="470" y="458" text-anchor="middle" fill="#ccc" font-size="9">props: dice, heldDice</text>
+  <text x="470" y="472" text-anchor="middle" fill="#ccc" font-size="9">throwsLeft, isMyTurn</text>
+  <text x="470" y="486" text-anchor="middle" fill="#ccc" font-size="9">audio shake/roll</text>
+
+  <!-- Chat -->
+  <rect x="570" y="420" width="150" height="80" rx="8" fill="#10101a" stroke="#4682b4" stroke-width="1.5"/>
+  <text x="645" y="442" text-anchor="middle" fill="#87ceeb" font-size="11" font-weight="bold">Chat.jsx</text>
+  <text x="645" y="458" text-anchor="middle" fill="#ccc" font-size="9">messages[]</text>
+  <text x="645" y="472" text-anchor="middle" fill="#90ee90" font-size="9">← chat-message</text>
+  <text x="645" y="486" text-anchor="middle" fill="#f4a460" font-size="9">→ chat-message</text>
+
+  <!-- Footer -->
+  <rect x="50" y="530" width="150" height="50" rx="8" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
+  <text x="125" y="552" text-anchor="middle" fill="#888" font-size="11" font-weight="bold">Footer.jsx</text>
+  <text x="125" y="568" text-anchor="middle" fill="#666" font-size="9">autor / versión / github</text>
+
+  <!-- Arrows App → children -->
+  <line x1="125" y1="385" x2="125" y2="418" stroke="#dd0000" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="295" y1="385" x2="295" y2="418" stroke="#228b22" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="470" y1="385" x2="470" y2="418" stroke="#f4a460" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="645" y1="385" x2="645" y2="418" stroke="#4682b4" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="125" y1="500" x2="125" y2="528" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- FLUJO RECONEXIÓN -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="50" y="610" width="680" height="90" rx="8" fill="#111" stroke="#ffce00" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="390" y="630" text-anchor="middle" fill="#ffce00" font-size="11" font-weight="bold">Flujo Reconexión (F5 / cierre accidental)</text>
+  <text x="390" y="650" text-anchor="middle" fill="#ccc" font-size="10">localStorage(name+role) → auto set-player → servidor cancela timer gracia (30s) → player-assigned → hasEntered=true</text>
+  <text x="390" y="668" text-anchor="middle" fill="#90ee90" font-size="10">✓ Salta Welcome   ✓ Recupera rol   ✓ Board/Chat restaurados desde gameState del servidor</text>
+  <text x="390" y="686" text-anchor="middle" fill="#888" font-size="9.5">Si pasan +30s sin reconectar → rol liberado → otro jugador puede tomarlo</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SERVIDOR -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="780" y="60" width="390" height="810" rx="14" fill="#111" stroke="#dd0000" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="975" y="82" text-anchor="middle" fill="#dd0000" font-size="13" font-weight="bold">⚙  SERVIDOR (Node + Socket.io)</text>
+
+  <!-- gameState -->
+  <rect x="800" y="92" width="350" height="160" rx="8" fill="#1a0a0a" stroke="#dd0000" stroke-width="1.5"/>
+  <text x="975" y="112" text-anchor="middle" fill="#ff6666" font-size="11" font-weight="bold">gameState (memoria)</text>
+  <text x="975" y="132" text-anchor="middle" fill="#ccc" font-size="10">board: {}  ← puntajes del tablero</text>
+  <text x="975" y="148" text-anchor="middle" fill="#ccc" font-size="10">blackout: {}  ← celdas tachadas</text>
+  <text x="975" y="164" text-anchor="middle" fill="#ccc" font-size="10">dice: { dice[], heldDice[], throwsLeft, rollCount }</text>
+  <text x="975" y="180" text-anchor="middle" fill="#ccc" font-size="10">chat: []  ← últimos 50 mensajes</text>
+  <text x="975" y="196" text-anchor="middle" fill="#ccc" font-size="10">players: { socketId: { name, role, _disconnectTimer } }</text>
+  <text x="975" y="212" text-anchor="middle" fill="#ccc" font-size="10">currentTurn: "jugador1" | "jugador2"</text>
+  <text x="975" y="232" text-anchor="middle" fill="#888" font-size="9">⚠ Estado en RAM — se pierde si el servidor reinicia</text>
+
+  <!-- Eventos recibidos -->
+  <rect x="800" y="270" width="165" height="230" rx="8" fill="#1a1a0a" stroke="#f4a460" stroke-width="1.5"/>
+  <text x="882" y="290" text-anchor="middle" fill="#f4a460" font-size="11" font-weight="bold">Recibe (on)</text>
+  <text x="882" y="310" text-anchor="middle" fill="#ccc" font-size="9.5">set-player</text>
+  <text x="882" y="326" text-anchor="middle" fill="#ccc" font-size="9.5">update-diceroller *</text>
+  <text x="882" y="342" text-anchor="middle" fill="#ccc" font-size="9.5">end-turn</text>
+  <text x="882" y="358" text-anchor="middle" fill="#ccc" font-size="9.5">update-board</text>
+  <text x="882" y="374" text-anchor="middle" fill="#ccc" font-size="9.5">update-board-blackout</text>
+  <text x="882" y="390" text-anchor="middle" fill="#ccc" font-size="9.5">reset-board</text>
+  <text x="882" y="406" text-anchor="middle" fill="#ccc" font-size="9.5">chat-message</text>
+  <text x="882" y="422" text-anchor="middle" fill="#ccc" font-size="9.5">clear-chat</text>
+  <text x="882" y="438" text-anchor="middle" fill="#ccc" font-size="9.5">disconnect</text>
+  <text x="882" y="458" text-anchor="middle" fill="#888" font-size="8.5">* solo si es tu turno</text>
+  <text x="882" y="472" text-anchor="middle" fill="#888" font-size="8.5">  (role === currentTurn)</text>
+  <text x="882" y="488" text-anchor="middle" fill="#888" font-size="8.5">  validado en servidor</text>
+
+  <!-- Eventos emitidos -->
+  <rect x="975" y="270" width="165" height="230" rx="8" fill="#0a1a0a" stroke="#90ee90" stroke-width="1.5"/>
+  <text x="1057" y="290" text-anchor="middle" fill="#90ee90" font-size="11" font-weight="bold">Emite (emit)</text>
+  <text x="1057" y="310" text-anchor="middle" fill="#ccc" font-size="9.5">game-state  (al conectar)</text>
+  <text x="1057" y="326" text-anchor="middle" fill="#ccc" font-size="9.5">player-assigned</text>
+  <text x="1057" y="342" text-anchor="middle" fill="#ccc" font-size="9.5">players-update</text>
+  <text x="1057" y="358" text-anchor="middle" fill="#ccc" font-size="9.5">update-diceroller</text>
+  <text x="1057" y="374" text-anchor="middle" fill="#ccc" font-size="9.5">turn-update</text>
+  <text x="1057" y="390" text-anchor="middle" fill="#ccc" font-size="9.5">update-board</text>
+  <text x="1057" y="406" text-anchor="middle" fill="#ccc" font-size="9.5">update-board-blackout</text>
+  <text x="1057" y="422" text-anchor="middle" fill="#ccc" font-size="9.5">reset-board</text>
+  <text x="1057" y="438" text-anchor="middle" fill="#ccc" font-size="9.5">chat-message</text>
+  <text x="1057" y="454" text-anchor="middle" fill="#ccc" font-size="9.5">chat-cleared</text>
+
+  <!-- Roles / Turno -->
+  <rect x="800" y="520" width="350" height="100" rx="8" fill="#0a0a1a" stroke="#4682b4" stroke-width="1.5"/>
+  <text x="975" y="540" text-anchor="middle" fill="#87ceeb" font-size="11" font-weight="bold">Roles y Turno</text>
+  <text x="975" y="558" text-anchor="middle" fill="#ccc" font-size="9.5">jugador1 (TOP)  |  jugador2 (BOTTOM)  |  spectator</text>
+  <text x="975" y="574" text-anchor="middle" fill="#ccc" font-size="9.5">Solo 2 jugadores activos — el resto entra como spectator</text>
+  <text x="975" y="590" text-anchor="middle" fill="#ccc" font-size="9.5">currentTurn alterna jugador1 ↔ jugador2 en end-turn</text>
+  <text x="975" y="606" text-anchor="middle" fill="#888" font-size="9">Spectator: puede chatear, no puede tocar tablero ni dados</text>
+
+  <!-- Grace period -->
+  <rect x="800" y="638" width="350" height="80" rx="8" fill="#1a1000" stroke="#ffce00" stroke-width="1.5"/>
+  <text x="975" y="658" text-anchor="middle" fill="#ffce00" font-size="11" font-weight="bold">Grace Period (reconexión)</text>
+  <text x="975" y="676" text-anchor="middle" fill="#ccc" font-size="9.5">disconnect → setTimeout 30s → libera rol</text>
+  <text x="975" y="692" text-anchor="middle" fill="#90ee90" font-size="9.5">set-player mismo name+role → clearTimeout → restaura</text>
+  <text x="975" y="708" text-anchor="middle" fill="#888" font-size="9">_disconnectTimer guardado en players[socketId]</text>
+
+  <!-- Express static -->
+  <rect x="800" y="736" width="350" height="60" rx="8" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
+  <text x="975" y="756" text-anchor="middle" fill="#aaa" font-size="11" font-weight="bold">Express</text>
+  <text x="975" y="774" text-anchor="middle" fill="#888" font-size="9.5">serve /dist  |  GET * → index.html  |  PORT 3000</text>
+  <text x="975" y="788" text-anchor="middle" fill="#888" font-size="9">CORS: localhost:5173 / netlify / onrender</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- WEBSOCKET CENTRAL ARROW -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="735" y="340" width="40" height="160" rx="6" fill="#1a1a1a" stroke="#ffce00" stroke-width="1.5"/>
+  <text x="755" y="415" text-anchor="middle" fill="#ffce00" font-size="9" font-weight="bold" transform="rotate(-90,755,415)">WebSocket</text>
+
+  <!-- Arrow cliente → websocket -->
+  <line x1="718" y1="390" x2="733" y2="390" stroke="#f4a460" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Arrow websocket → cliente -->
+  <line x1="733" y1="420" x2="718" y2="420" stroke="#90ee90" stroke-width="2" marker-end="url(#arrleft)"/>
+  <!-- Arrow websocket → servidor -->
+  <line x1="775" y1="390" x2="798" y2="390" stroke="#f4a460" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Arrow servidor → websocket -->
+  <line x1="798" y1="420" x2="775" y2="420" stroke="#90ee90" stroke-width="2" marker-end="url(#arrleft)"/>
+
+  <!-- Labels -->
+  <text x="725" y="385" text-anchor="middle" fill="#f4a460" font-size="8">emit →</text>
+  <text x="725" y="432" text-anchor="middle" fill="#90ee90" font-size="8">← on</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- LEYENDA -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <rect x="50" y="730" width="680" height="120" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="390" y="750" text-anchor="middle" fill="#888" font-size="11" font-weight="bold">Leyenda</text>
+  <rect x="70" y="760" width="12" height="12" fill="#f4a460"/>
+  <text x="88" y="771" fill="#ccc" font-size="9.5">emit → (cliente envía al servidor)</text>
+  <rect x="70" y="780" width="12" height="12" fill="#90ee90"/>
+  <text x="88" y="791" fill="#ccc" font-size="9.5">← on (servidor envía al cliente)</text>
+  <rect x="70" y="800" width="12" height="12" fill="#ffce00"/>
+  <text x="88" y="811" fill="#ccc" font-size="9.5">localStorage persiste nombre y rol entre recargas</text>
+  <rect x="300" y="760" width="12" height="12" fill="#4682b4"/>
+  <text x="318" y="771" fill="#ccc" font-size="9.5">SocketContext provee socket a todos los hijos</text>
+  <rect x="300" y="780" width="12" height="12" fill="#dd0000"/>
+  <text x="318" y="791" fill="#ccc" font-size="9.5">gameState vive en RAM del servidor (se pierde si reinicia)</text>
+  <rect x="300" y="800" width="12" height="12" fill="#228b22"/>
+  <text x="318" y="811" fill="#ccc" font-size="9.5">Board/Chat se restauran desde game-state al reconectar</text>
+  <text x="390" y="838" text-anchor="middle" fill="#555" font-size="9">generaladeutsche.onrender.com  |  v1.0.0  |  Juan Pieroni © 2025</text>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ARROW DEFS -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#aaa"/>
+    </marker>
+    <marker id="arrleft" markerWidth="8" markerHeight="8" refX="2" refY="3" orient="auto">
+      <path d="M8,0 L8,6 L0,3 z" fill="#aaa"/>
+    </marker>
+    <marker id="arrrev" markerWidth="8" markerHeight="8" refX="2" refY="3" orient="auto">
+      <path d="M8,0 L8,6 L0,3 z" fill="#aaa"/>
+    </marker>
+  </defs>
+
+</svg>
