@@ -57,8 +57,8 @@ io.on("connection", (socket) => {
     })
 
     socket.on("set-player", (playerName) => {
-        const playerCount = Object.keys(gameState.players).length
-        const playerRole = playerCount === 0 ? "jugador1" : "jugador2"
+        const roles = Object.values(gameState.players).map(p => p.role)
+        const playerRole = roles.includes("jugador1") ? "jugador2" : "jugador1"
         const displayName = playerRole === "jugador1" ? "TOP" : "BOTTOM"
 
         gameState.players[socket.id] = { name: displayName, role: playerRole }
