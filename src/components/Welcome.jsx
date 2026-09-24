@@ -3,7 +3,7 @@ import "./Welcome.css"
  
 
 const Welcome = ({ onEnter }) => {
-    const [name, setName] = useState("")
+    const [name, setName] = useState(() => localStorage.getItem("generala-name") || "")
     const [muted, setMuted] = useState(false)
     const audioRef = useRef(null)
 

@@ -22,26 +22,11 @@ const App = () => {
     const [rollCount, setRollCount] = useState(0)
     const [myRole, setMyRole] = useState(null)
     const [currentTurn, setCurrentTurn] = useState("jugador1")
-    const [playerName, setPlayerName] = useState(() => localStorage.getItem("generala-name") || "")
+    const [playerName, setPlayerName] = useState("")
     const [hasEntered, setHasEntered] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const isMyTurn = myRole === currentTurn
-
-    // Auto-reingreso si hay sesión guardada
-    useEffect(() => {
-        const savedName = localStorage.getItem("generala-name")
-        const savedRole = localStorage.getItem("generala-role")
-        if (!socket || !savedName || !savedRole) return
-
-        const rejoin = () => {
-            socket.emit("set-player", savedName, savedRole)
-            setHasEntered(true)
-        }
-
-        if (socket.connected) rejoin()
-        else socket.once("connect", rejoin)
-    }, [socket])
 
     useEffect(() => {
         if (!socket) return
