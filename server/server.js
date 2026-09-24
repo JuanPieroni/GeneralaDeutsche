@@ -56,23 +56,26 @@ io.on("connection", (socket) => {
         currentTurn: gameState.currentTurn,
     })
 
-    socket.on("set-player", (playerName, preferredRole) => {
+    socket.on("set-player", (playerName) => {
+        // Si el mismo nombre ya existe (reconexión), liberar el slot viejo
+        const existingEntry = Object.entries(gameState.players).find(
+            ([id, p]) => p.name === playerName && id !== socket.id
+        )
+        if (existingEntry) {
+            delete gameState.players[existingEntry[0]]
+        }
+
         const roles = Object.values(gameState.players).map(p => p.role)
         const activePlayers = roles.filter(r => r === "jugador1" || r === "jugador2")
 
-        if (activePlayers.length >= 2 && (!preferredRole || roles.includes(preferredRole))) {
+        if (activePlayers.length >= 2) {
             gameState.players[socket.id] = { name: playerName, role: "spectator" }
             socket.emit("player-assigned", { role: "spectator", name: playerName, currentTurn: gameState.currentTurn })
             io.emit("players-update", gameState.players)
             return
         }
 
-        let playerRole
-        if (preferredRole && !roles.includes(preferredRole)) {
-            playerRole = preferredRole
-        } else {
-            playerRole = roles.includes("jugador1") ? "jugador2" : "jugador1"
-        }
+        const playerRole = roles.filter(r => r === "jugador1" || r === "jugador2").includes("jugador1") ? "jugador2" : "jugador1"
         const displayName = playerRole === "jugador1" ? "TOP" : "BOTTOM"
 
         gameState.players[socket.id] = { name: playerName, role: playerRole, displayName }

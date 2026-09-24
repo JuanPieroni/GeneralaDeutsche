@@ -45,7 +45,6 @@ const App = () => {
 
         const handlePlayerAssigned = ({ role, name, currentTurn: turn }) => {
             setMyRole(role)
-            localStorage.setItem("generala-role", role)
             if (turn) setCurrentTurn(turn)
         }
 
@@ -160,8 +159,7 @@ const App = () => {
         localStorage.setItem("generala-name", name)
         setIsLoading(true)
         if (socket?.connected) {
-            const savedRole = localStorage.getItem("generala-role")
-            socket.emit("set-player", name, savedRole)
+            socket.emit("set-player", name)
         }
         setTimeout(() => {
             setIsLoading(false)
