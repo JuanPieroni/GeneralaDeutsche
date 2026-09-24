@@ -36,3 +36,9 @@
 - **Solución propuesta**: Agregar estado `isLoading` que se activa al hacer submit, muestra una pantalla/spinner por ~1000-1500ms con `setTimeout`, y luego muestra el board.
 - **Archivos**: `src/App.jsx`, `src/components/Welcome.jsx`
 
+## 7. Pérdida de estado al recargar la página
+- **Problema**: Al hacer F5 o recargar, el jugador vuelve a la pantalla de nombre. Al reingresar, el tablero puede aparecer borrado o en estado inconsistente. Si un jugador sale o recarga accidentalmente, se pierde el progreso.
+- **Notas**: Requiere testeo para confirmar si el tablero se borra realmente o solo se desincroniza visualmente.
+- **Solución propuesta a evaluar**: Persistir `playerName` y `hasEntered` en `localStorage` para reentrar automáticamente sin pasar por Welcome. El estado del tablero ya vive en el servidor, por lo que reconectarse debería restaurarlo.
+- **Archivos**: `src/App.jsx`
+
