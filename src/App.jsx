@@ -153,9 +153,7 @@ const App = () => {
 
     return (
         <>
-            <h1 style={{ fontSize: "2rem", textAlign: "center", margin: "1rem 0", display: "block" }}>
-                GENERALA ALEMANA
-            </h1>
+            <h1>GENERALA ALEMANA</h1>
             <div className="app-container">
                 <div
                     className="board-container"
@@ -176,7 +174,7 @@ const App = () => {
                         onEndTurn={endTurn}
                     />
                 </div>
-                <div>
+                <div className="chat-side">
                     <Chat />
                     <div style={{ textAlign: "center", marginTop: "1rem" }}>
                         <button onClick={resetBoard} className="reset-button">

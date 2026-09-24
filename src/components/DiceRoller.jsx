@@ -67,7 +67,6 @@ const DiceRoller = ({
 
     return (
         <div className="dice-roller">
-            <h3>Dados de Generala</h3>
 
             {/* Indicador de turno */}
             <div style={{
