@@ -21,3 +21,18 @@
 - **Solución propuesta**: Limpiar el estado del chat en el servidor al iniciar nueva partida, o en el cliente al hacer `set-player`.
 - **Archivos**: `src/App.jsx`, `server/server.js`
 
+## 5. Footer con datos del autor
+- **Problema**: No hay footer con información del autor ni copyright.
+- **Solución propuesta**: Crear componente `Footer.jsx` con: nombre Juan Pieroni, copyright © 2025, versión del juego, y link al repositorio.
+- **Datos a mostrar**:
+  - Autor: Juan Pieroni
+  - Copyright © 2025
+  - GitHub / Repo: `[COMPLETAR LINK]`
+  - Versión: (ej: v1.0.0)
+- **Archivos**: nuevo `src/components/Footer.jsx`, importar en `src/App.jsx`
+
+## 6. Fake Loading al ingresar al juego
+- **Problema**: Al enviar el nombre en Welcome, el board aparece instantáneamente sin ninguna transición, lo que se siente abrupto.
+- **Solución propuesta**: Agregar estado `isLoading` que se activa al hacer submit, muestra una pantalla/spinner por ~1000-1500ms con `setTimeout`, y luego muestra el board.
+- **Archivos**: `src/App.jsx`, `src/components/Welcome.jsx`
+

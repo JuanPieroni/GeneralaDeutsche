@@ -156,13 +156,14 @@ const DiceRoller = ({
                     onMouseLeave={stopShakeSound}
                     disabled={throwsLeft === 0 || !isMyTurn}
                 >
-                    Tirar Dados ({throwsLeft})
+                   Arrojar(Mantener) ({throwsLeft})
                 </motion.button>
 
                 <motion.button
                     whileTap={{ scale: 0.8 }}
                     onClick={resetDados}
                     disabled={!isMyTurn}
+                    onClickCapture={"Mantener para batir"}
                 >
                     Reset Dados
                 </motion.button>

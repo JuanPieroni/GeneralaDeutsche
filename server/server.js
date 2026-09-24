@@ -81,6 +81,11 @@ io.on("connection", (socket) => {
         io.emit("players-update", gameState.players)
     })
 
+    socket.on("clear-chat", () => {
+        gameState.chat = []
+        io.emit("chat-cleared")
+    })
+
     socket.on("chat-message", (msg) => {
         const player = gameState.players[socket.id]
         if (!player) return

@@ -7,6 +7,7 @@ import Swal from "sweetalert2"
 import "./App.css"
 import "./styles/globals.css"
 import { useSocket } from "./components/SocketContext"
+import Footer from "./components/Footer"
 
 const INITIAL_DICE = [0, 0, 0, 0, 0]
 const INITIAL_HELD = [false, false, false, false, false]
@@ -23,6 +24,7 @@ const App = () => {
     const [currentTurn, setCurrentTurn] = useState("jugador1")
     const [playerName, setPlayerName] = useState("")
     const [hasEntered, setHasEntered] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const isMyTurn = myRole === currentTurn
 
@@ -155,14 +157,33 @@ const App = () => {
 
     const handleEnter = (name) => {
         setPlayerName(name)
-        setHasEntered(true)
+        setIsLoading(true)
         if (socket?.connected) {
             const savedRole = localStorage.getItem("generala-role")
             socket.emit("set-player", name, savedRole)
         }
+        setTimeout(() => {
+            setIsLoading(false)
+            setHasEntered(true)
+        }, 2200)
     }
 
     const isSpectator = myRole === "spectator"
+
+    if (isLoading) return (
+        <div style={{
+            position: "fixed", inset: 0, background: "#111",
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            gap: "1.2rem", zIndex: 9999
+        }}>
+            <div style={{ fontSize: "3rem", animation: "spin 1s linear infinite" }}>🎲</div>
+            <p style={{ color: "var(--german-gold)", fontFamily: "Germania One, serif", fontSize: "1.4rem", margin: 0 }}>
+                Aguarde por favor...
+            </p>
+            <style>{`@keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }`}</style>
+        </div>
+    )
 
     return (
         <>
@@ -221,10 +242,14 @@ const App = () => {
                             <button onClick={resetBoard} className="reset-button" style={{ width: "100%" }}>
                                 🗑️ Limpiar Tablero
                             </button>
+                            <button onClick={() => socket?.emit("clear-chat")} className="reset-button" style={{ width: "100%", marginTop: "0.5rem" }}>
+                                🗑️ Limpiar Chat
+                            </button>
                         </div>
                     )}
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

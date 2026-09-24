@@ -14,12 +14,16 @@ const Chat = () => {
         const handleGameState = (state) => setMessages(state.chat || [])
         const handleMessage = (msg) => setMessages((prev) => [...prev, msg])
 
+        const handleClearChat = () => setMessages([])
+
         socket.on("game-state", handleGameState)
         socket.on("chat-message", handleMessage)
+        socket.on("chat-cleared", handleClearChat)
 
         return () => {
             socket.off("game-state", handleGameState)
             socket.off("chat-message", handleMessage)
+            socket.off("chat-cleared", handleClearChat)
         }
     }, [socket])
 
