@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react"
 import Board from "./components/Board"
 import DiceRoller from "./components/DiceRoller"
 import Chat from "./components/Chat"
+import Welcome from "./components/Welcome"
 import Swal from "sweetalert2"
 import "./App.css"
 import "./styles/globals.css"
@@ -20,16 +21,15 @@ const App = () => {
     const [rollCount, setRollCount] = useState(0)
     const [myRole, setMyRole] = useState(null)
     const [currentTurn, setCurrentTurn] = useState("jugador1")
+    const [playerName, setPlayerName] = useState("")
+    const [hasEntered, setHasEntered] = useState(false)
 
     const isMyTurn = myRole === currentTurn
 
     useEffect(() => {
         if (!socket) return
 
-        const handleConnect = () => {
-            const savedRole = localStorage.getItem("generala-role")
-            socket.emit("set-player", `Jugador-${socket.id.slice(-4)}`, savedRole)
-        }
+        const handleConnect = () => {}
 
         const handleGameState = (state) => {
             if (state.dice) {
@@ -41,7 +41,7 @@ const App = () => {
             if (state.currentTurn) setCurrentTurn(state.currentTurn)
         }
 
-        const handlePlayerAssigned = ({ role, currentTurn: turn }) => {
+        const handlePlayerAssigned = ({ role, name, currentTurn: turn }) => {
             setMyRole(role)
             localStorage.setItem("generala-role", role)
             if (turn) setCurrentTurn(turn)
@@ -153,36 +153,76 @@ const App = () => {
         })
     }, [socket])
 
+    const handleEnter = (name) => {
+        setPlayerName(name)
+        setHasEntered(true)
+        if (socket?.connected) {
+            const savedRole = localStorage.getItem("generala-role")
+            socket.emit("set-player", name, savedRole)
+        }
+    }
+
+    const isSpectator = myRole === "spectator"
+
     return (
         <>
+            {!hasEntered && <Welcome onEnter={handleEnter} />}
             <h1>GENERALA ALEMANA</h1>
             <div className="app-container">
                 <div
-                    className="board-container"
-                    style={{ maxWidth: 600, margin: "auto", padding: "1rem", minHeight: "400px", display: "block" }}
-                >
-                    <Board />
-                    <DiceRoller
-                        dice={dice}
-                        heldDice={heldDice}
-                        throwsLeft={throwsLeft}
-                        tirarDados={tirarDados}
-                        toggleHold={toggleHold}
-                        resetDados={resetDados}
-                        rollCount={rollCount}
-                        isMyTurn={isMyTurn}
-                        myRole={myRole}
-                        currentTurn={currentTurn}
-                        onEndTurn={endTurn}
-                    />
-                </div>
-                <div className="chat-side">
-                    <Chat />
-                    <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                        <button onClick={resetBoard} className="reset-button">
-                            🗑️ Limpiar Tablero
-                        </button>
+                        className="board-container"
+                        style={{ maxWidth: 600, margin: "auto", padding: "1rem", minHeight: "400px", display: "block", position: "relative" }}
+                    >
+                        {isSpectator && (
+                            <div style={{
+                                position: "absolute",
+                                inset: 0,
+                                background: "rgba(0,0,0,0.55)",
+                                borderRadius: 16,
+                                zIndex: 10,
+                                pointerEvents: "all",
+                            }} />
+                        )}
+                        <Board />
+                        <DiceRoller
+                            dice={dice}
+                            heldDice={heldDice}
+                            throwsLeft={throwsLeft}
+                            tirarDados={tirarDados}
+                            toggleHold={toggleHold}
+                            resetDados={resetDados}
+                            rollCount={rollCount}
+                            isMyTurn={isMyTurn}
+                            myRole={myRole}
+                            currentTurn={currentTurn}
+                            onEndTurn={endTurn}
+                            playerName={playerName}
+                        />
                     </div>
+                <div className="chat-side">
+                    {isSpectator && (
+                        <div style={{
+                            textAlign: "center",
+                            padding: "1rem",
+                            color: "#ffce00",
+                            fontFamily: "Germania One, serif",
+                            fontSize: "1.1rem",
+                            border: "2px solid #ffce00",
+                            borderRadius: 8,
+                            marginBottom: "0.75rem",
+                            background: "rgba(255,206,0,0.08)"
+                        }}>
+                            👁️ Partida en curso — Solo podés chatear
+                        </div>
+                    )}
+                    <Chat playerName={playerName} />
+                    {!isSpectator && (
+                        <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                            <button onClick={resetBoard} className="reset-button">
+                                🗑️ Limpiar Tablero
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

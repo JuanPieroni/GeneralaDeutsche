@@ -58,6 +58,15 @@ io.on("connection", (socket) => {
 
     socket.on("set-player", (playerName, preferredRole) => {
         const roles = Object.values(gameState.players).map(p => p.role)
+        const activePlayers = roles.filter(r => r === "jugador1" || r === "jugador2")
+
+        if (activePlayers.length >= 2 && (!preferredRole || roles.includes(preferredRole))) {
+            gameState.players[socket.id] = { name: playerName, role: "spectator" }
+            socket.emit("player-assigned", { role: "spectator", name: playerName, currentTurn: gameState.currentTurn })
+            io.emit("players-update", gameState.players)
+            return
+        }
+
         let playerRole
         if (preferredRole && !roles.includes(preferredRole)) {
             playerRole = preferredRole
@@ -66,7 +75,7 @@ io.on("connection", (socket) => {
         }
         const displayName = playerRole === "jugador1" ? "TOP" : "BOTTOM"
 
-        gameState.players[socket.id] = { name: displayName, role: playerRole }
+        gameState.players[socket.id] = { name: playerName, role: playerRole, displayName }
 
         socket.emit("player-assigned", { role: playerRole, name: playerName, currentTurn: gameState.currentTurn })
         io.emit("players-update", gameState.players)

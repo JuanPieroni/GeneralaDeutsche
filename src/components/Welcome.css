@@ -1,0 +1,101 @@
+.welcome-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.welcome-box {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    border: 3px solid #ffce00;
+    border-radius: 20px;
+    padding: 2.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 0 40px rgba(255, 206, 0, 0.3), 0 0 80px rgba(0, 0, 0, 0.8);
+    max-width: 420px;
+    width: 90%;
+}
+
+.welcome-eagle {
+    font-size: 3rem;
+}
+
+.welcome-title {
+    font-family: "Germania One", serif;
+    font-size: 2rem;
+    color: #ffce00;
+    text-shadow: 2px 2px 0 #000, 4px 4px 0 #dd0000;
+    letter-spacing: 3px;
+    text-align: center;
+    animation: glow 3s ease-in-out infinite alternate;
+}
+
+.welcome-subtitle {
+    font-family: "Germania One", serif;
+    color: #aaa;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+.welcome-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.welcome-input {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #ffce00;
+    background: #111;
+    color: #fff;
+    text-align: center;
+    font-family: "Germania One", serif;
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.welcome-input::placeholder {
+    color: #555;
+}
+
+.welcome-input:focus {
+    border-color: #fff;
+}
+
+.welcome-button {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    background: #dd0000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Germania One", serif;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+}
+
+.welcome-button:hover:not(:disabled) {
+    background: #ff2222;
+}
+
+.welcome-button:disabled {
+    background: #444;
+    cursor: not-allowed;
+}
+
+.welcome-deco {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    letter-spacing: 8px;
+}

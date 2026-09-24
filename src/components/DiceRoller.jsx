@@ -22,6 +22,7 @@ const DiceRoller = ({
     myRole,
     currentTurn,
     onEndTurn,
+    playerName,
 }) => {
     const [isShaking, setIsShaking] = useState(false)
     const [rollingDice, setRollingDice] = useState(dice.map(() => false))
@@ -68,8 +69,8 @@ const DiceRoller = ({
         tirarDados()
     }
 
-    const turnLabel = currentTurn === myRole
-        ? "🎲 Tu turno"
+    const turnLabel = isMyTurn
+        ? `🎲 Tu turno, ${playerName || "jugador"}`
         : `⏳ Turno del oponente`
 
     const turnColor = isMyTurn ? "#ffce00" : "#aaaaaa"
