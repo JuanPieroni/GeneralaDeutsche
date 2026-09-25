@@ -36,6 +36,17 @@
 - **Solución propuesta**: Agregar estado `isLoading` que se activa al hacer submit, muestra una pantalla/spinner por ~1000-1500ms con `setTimeout`, y luego muestra el board.
 - **Archivos**: `src/App.jsx`, `src/components/Welcome.jsx`
 
+## 8. Migración de Render a Railway
+- **Problema**: Render.com en plan gratuito tiene cold starts agresivos y latencia en disconnects de WebSocket que causa bugs de roles (spectator al refrescar).
+- **Solución propuesta**: Migrar el backend a Railway.app — sin cold starts, plan gratuito con $5/mes de crédito, sin cambios en el código.
+- **Pasos**:
+  - Crear cuenta en railway.app
+  - Nuevo proyecto → Deploy from GitHub repo
+  - Configurar variable `PORT` si es necesario
+  - Actualizar `allowedOrigins` en `server/server.js` con la nueva URL de Railway
+  - Actualizar `VITE_SOCKET_URL` en el cliente si aplica
+- **Archivos**: `server/server.js`
+
 ## 7. Pérdida de estado al recargar la página
 - **Problema**: Al hacer F5 o recargar, el jugador vuelve a la pantalla de nombre. Al reingresar, el tablero puede aparecer borrado o en estado inconsistente. Si un jugador sale o recarga accidentalmente, se pierde el progreso.
 - **Notas**: Requiere testeo para confirmar si el tablero se borra realmente o solo se desincroniza visualmente.

@@ -241,6 +241,9 @@ const App = () => {
                             <button onClick={resetBoard} className="reset-button" style={{ width: "100%" }}>
                                 🗑️ Limpiar Tablero
                             </button>
+                            <button onClick={() => socket?.emit("request-board-sync")} className="reset-button" style={{ width: "100%", marginTop: "0.5rem", background: "linear-gradient(135deg,#1a4a8a,#2266cc)" }}>
+                                🔄 Copiar Board del Servidor
+                            </button>
                             <button onClick={() => socket?.emit("clear-chat")} className="reset-button" style={{ width: "100%", marginTop: "0.5rem" }}>
                                 🗑️ Limpiar Chat
                             </button>

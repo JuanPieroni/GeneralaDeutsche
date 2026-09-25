@@ -13,7 +13,7 @@ const Footer = () => (
     >
         <span>© CopyRight 2025 Juan Pieroni</span>
         <span style={{ margin: "0 0.6rem", color: "#444" }}>|</span>
-        <span>Generala Alemana v1.0.3</span>
+        <span>Generala Alemana v1.0.4</span>
         <span style={{ margin: "0 0.6rem", color: "#444" }}>|</span>
         <a
             //  href="[COMPLETAR LINK]"

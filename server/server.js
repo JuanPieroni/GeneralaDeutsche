@@ -84,6 +84,17 @@ io.on("connection", (socket) => {
         io.emit("players-update", gameState.players)
     })
 
+    socket.on("request-board-sync", () => {
+        socket.emit("game-state", {
+            board: gameState.board,
+            blackout: gameState.blackout,
+            dice: gameState.dice,
+            chat: gameState.chat,
+            players: gameState.players,
+            currentTurn: gameState.currentTurn,
+        })
+    })
+
     socket.on("clear-chat", () => {
         gameState.chat = []
         io.emit("chat-cleared")
