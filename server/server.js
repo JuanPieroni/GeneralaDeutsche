@@ -13,8 +13,7 @@ const __dirname = path.dirname(__filename)
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://generaladeutsche.netlify.app",
-    "https://generaladeutsche.onrender.com",
+    "https://generala.up.railway.app",
 ]
 
 app.use(cors({ origin: allowedOrigins, methods: ["GET", "POST"], credentials: true }))
