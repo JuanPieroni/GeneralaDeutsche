@@ -172,7 +172,7 @@ const DiceRoller = ({
                     whileTap={{ scale: 0.8 }}
                     onClick={onEndTurn}
                     disabled={!isMyTurn}
-                    style={{ background: isMyTurn ? "#228b22" : undefined }}
+                    className={isMyTurn ? "btn-end-turn-active" : ""}
                 >
                     ✅ Terminar Turno
                 </motion.button>

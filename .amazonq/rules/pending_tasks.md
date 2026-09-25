@@ -1,4 +1,13 @@
 # Pending Tasks
+
+## ⚠️ Regla General de Desarrollo
+**La latencia del juego es prioridad absoluta.** Cualquier cambio visual, de UX o de features NO debe agregar:
+- Lógica extra en el critical path de WebSocket (emit/on)
+- Re-renders innecesarios en componentes que manejan dados o tablero
+- Animaciones CSS que usen `transform` pesado o `filter` en elementos que se actualizan frecuentemente
+- Librerías nuevas que aumenten el bundle sin justificación clara
+
+Todo cambio debe ser **CSS-first** cuando sea posible (animaciones, transiciones, highlights).
 ## 1. Autoplay de música al entrar
 - **Problema**: F5 no reproduce la música porque el browser bloquea autoplay hasta interacción del usuario.
 - **Solución propuesta**: Iniciar `audioRef.current.play()` dentro del `handleSubmit` (onClick del botón "Entrar al juego"), que ya es una interacción del usuario.

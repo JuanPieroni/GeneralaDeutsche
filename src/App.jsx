@@ -164,7 +164,7 @@ const App = () => {
         setTimeout(() => {
             setIsLoading(false)
             setHasEntered(true)
-        }, 2200)
+        }, 1500)
     }
 
     const isSpectator = myRole === "spectator"
@@ -188,9 +188,20 @@ const App = () => {
         <>
             {!hasEntered && <Welcome onEnter={handleEnter} />}
             <h1>GENERALA ALEMANA</h1>
+            <div style={{
+                textAlign: "center",
+                marginBottom: "0.5rem",
+                fontFamily: "Germania One, serif",
+                fontSize: "1rem",
+                color: isMyTurn ? "#00ff88" : "#aaaaaa",
+                letterSpacing: 1,
+                transition: "color 0.4s",
+            }}>
+                {myRole ? (isMyTurn ? `🟢 Tu turno, ${playerName}` : `⏳ Turno del oponente`) : ""}
+            </div>
             <div className="app-container">
                 <div
-                        className="board-container"
+                        className={`board-container${isMyTurn ? " my-turn" : ""}`}
                         style={{ maxWidth: 600, margin: "auto", padding: "1rem", minHeight: "400px", display: "block", position: "relative" }}
                     >
                         {isSpectator && (
@@ -241,11 +252,11 @@ const App = () => {
                             <button onClick={resetBoard} className="reset-button" style={{ width: "100%" }}>
                                 🗑️ Limpiar Tablero
                             </button>
-                            <button onClick={() => socket?.emit("request-board-sync")} className="reset-button" style={{ width: "100%", marginTop: "0.5rem", background: "linear-gradient(135deg,#1a4a8a,#2266cc)" }}>
-                                🔄 Copiar Board del Servidor
-                            </button>
                             <button onClick={() => socket?.emit("clear-chat")} className="reset-button" style={{ width: "100%", marginTop: "0.5rem" }}>
                                 🗑️ Limpiar Chat
+                            </button>
+                            <button onClick={() => socket?.emit("request-board-sync")} className="reset-button" style={{ width: "100%", marginTop: "0.5rem", background: "linear-gradient(135deg,#1a4a8a,#2266cc)" }}>
+                                🔄 Restituir Puntajes
                             </button>
                         </div>
                     )}

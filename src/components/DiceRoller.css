@@ -28,6 +28,7 @@
 .die.held {
   background-color: #93afce;
   border-color: #004a99;
+  box-shadow: 0 0 10px rgba(0, 100, 255, 0.6), inset 0 0 6px rgba(0, 100, 255, 0.2);
 }
 
 .die-face {
@@ -86,6 +87,18 @@ button {
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.btn-end-turn-active {
+  background: linear-gradient(135deg, #1a7a1a, #228b22) !important;
+  border: 2px solid #00ff88 !important;
+  color: #fff !important;
+  animation: endTurnPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes endTurnPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,255,136,0.4); }
+  50%       { box-shadow: 0 0 20px rgba(0,255,136,0.8); }
 }
 
 
