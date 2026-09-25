@@ -53,3 +53,32 @@
 - **Solución propuesta a evaluar**: Persistir `playerName` y `hasEntered` en `localStorage` para reentrar automáticamente sin pasar por Welcome. El estado del tablero ya vive en el servidor, por lo que reconectarse debería restaurarlo.
 - **Archivos**: `src/App.jsx`
 
+## 11. necesito reducir el javascript y el css que no se usa
+
+**Notas**:Show agent walkthrough
+Para reducir el JavaScript y CSS que no se utiliza en tu sitio, enfócate en los siguientes puntos clave detectados en el informe:
+
+Limpieza de Extensiones
+El reporte indica que la mayor parte del JavaScript sin minificar y pesado proviene de extensiones del navegador (como AdBlock o similares con prefijos chrome-extension://).
+
+Acción: Realiza tus pruebas de Lighthouse en una ventana de incógnito. Esto desactivará las extensiones y te dará una visión real de lo que tus usuarios descargan.
+Optimización de CSS
+Tienes un archivo principal (index-BGOAhQH1.css) y varias fuentes de Google Fonts que bloquean el renderizado inicial.
+
+Critical CSS: Extrae el CSS necesario para mostrar la parte superior de la página (above the fold) e inclúyelo directamente en el <head>.
+Carga diferida: Aplica el atributo rel="preload" o carga el resto del CSS de forma asíncrona para que no detenga la visualización del contenido.
+Reducción de JavaScript del lado del Servidor/App
+Aunque el reporte está "contaminado" por extensiones, el tiempo de ejecución del hilo principal es elevado (7 segundos).
+
+Code Splitting: Si usas un framework como React o Vue (común en despliegues en Render), utiliza carga dinámica (import()) para dividir tu código en paquetes más pequeños.
+Tree Shaking: Asegúrate de que tu herramienta de construcción (Vite, Webpack) esté eliminando funciones de librerías de terceros que no estás llamando.
+Servidor y Entrega
+El tiempo de respuesta inicial del servidor es de 700ms, lo cual es lento.
+
+Compresión: Verifica que el servidor (Render) esté entregando los archivos con Gzip o Brotli activado.
+Minificación: Asegúrate de que el comando de construcción en Render sea npm run build para que los archivos de producción se generen minificados automáticamente.
+ **Solución propuesta a evaluar**: eliminar codigo superfluo de JS y de css 
+
+
+
+**HASTA AHORA LA VERSION 1.0.4 Funciona Bien.. solo falta corregir el delay al seleccionar dado y mejroar el rendimiento "**

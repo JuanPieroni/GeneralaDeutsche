@@ -1,10 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generala Alemana</title>
+
+    <!-- Critical CSS: above the fold -->
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{background:#111;color:#f8f5e4;font-family:serif}
+      #root{min-height:100vh}
+    </style>
+
+    <!-- Google Fonts: preconnect + carga diferida -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel:wght@400;600;700&family=Kalam:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel:wght@400;600;700&family=Kalam:wght@400;700&display=swap"></noscript>
   </head>
   <body>
     <div id="root"></div>
