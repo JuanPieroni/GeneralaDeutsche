@@ -40,7 +40,8 @@ const gameState = {
     dice: { ...INITIAL_DICE },
     chat: [],
     players: {},
-    currentTurn: "jugador1", // quién puede tirar dados
+    currentTurn: "jugador1",
+    scorer: {},
 }
 
 io.on("connection", (socket) => {
@@ -53,6 +54,7 @@ io.on("connection", (socket) => {
         chat: gameState.chat,
         players: gameState.players,
         currentTurn: gameState.currentTurn,
+        scorer: gameState.scorer,
     })
 
     socket.on("set-player", (playerName) => {
@@ -64,8 +66,9 @@ io.on("connection", (socket) => {
             delete gameState.players[existingEntry[0]]
         }
 
-        const roles = Object.values(gameState.players).map(p => p.role)
-        const activePlayers = roles.filter(r => r === "jugador1" || r === "jugador2")
+        // Recalcular roles DESPUÉS de limpiar el slot viejo
+        const takenRoles = Object.values(gameState.players).map(p => p.role)
+        const activePlayers = takenRoles.filter(r => r === "jugador1" || r === "jugador2")
 
         if (activePlayers.length >= 2) {
             gameState.players[socket.id] = { name: playerName, role: "spectator" }
@@ -74,7 +77,7 @@ io.on("connection", (socket) => {
             return
         }
 
-        const playerRole = roles.filter(r => r === "jugador1" || r === "jugador2").includes("jugador1") ? "jugador2" : "jugador1"
+        const playerRole = takenRoles.includes("jugador1") ? "jugador2" : "jugador1"
         const displayName = playerRole === "jugador1" ? "TOP" : "BOTTOM"
 
         gameState.players[socket.id] = { name: playerName, role: playerRole, displayName }
@@ -91,7 +94,25 @@ io.on("connection", (socket) => {
             chat: gameState.chat,
             players: gameState.players,
             currentTurn: gameState.currentTurn,
+            scorer: gameState.scorer,
         })
+    })
+
+    socket.on("update-scorer", (scorerState) => {
+        gameState.scorer = { ...gameState.scorer, ...scorerState }
+        socket.broadcast.emit("update-scorer", scorerState)
+    })
+
+    socket.on("reset-scorer-col", (col) => {
+        Object.keys(gameState.scorer).forEach(k => {
+            if (k.startsWith(`${col}-`)) delete gameState.scorer[k]
+        })
+        io.emit("reset-scorer-col", col)
+    })
+
+    socket.on("reset-scorer", () => {
+        gameState.scorer = {}
+        io.emit("reset-scorer")
     })
 
     socket.on("clear-chat", () => {
@@ -147,7 +168,9 @@ io.on("connection", (socket) => {
         gameState.blackout = {}
         gameState.dice = { ...INITIAL_DICE }
         gameState.currentTurn = "jugador1"
+        gameState.scorer = {}
         io.emit("reset-board")
+        io.emit("reset-scorer")
         io.emit("turn-update", gameState.currentTurn)
         io.emit("update-diceroller", gameState.dice)
     })

@@ -8,6 +8,7 @@ import "./App.css"
 import "./styles/globals.css"
 import { useSocket } from "./components/SocketContext"
 import Footer from "./components/Footer"
+import Scorer from "./components/Scorer"
 
 const INITIAL_DICE = [0, 0, 0, 0, 0]
 const INITIAL_HELD = [false, false, false, false, false]
@@ -25,6 +26,14 @@ const App = () => {
     const [playerName, setPlayerName] = useState("")
     const [hasEntered, setHasEntered] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [players, setPlayers] = useState({})
+    const playersRef = React.useRef({})
+
+    const toast = (icon, title) => Swal.fire({
+        toast: true, position: "top-end", icon, title,
+        showConfirmButton: false, timer: 4000, timerProgressBar: true,
+        background: "#1a1a1a", color: "#ffce00",
+    })
 
     const isMyTurn = myRole === currentTurn
 
@@ -41,6 +50,7 @@ const App = () => {
                 setRollCount(state.dice.rollCount)
             }
             if (state.currentTurn) setCurrentTurn(state.currentTurn)
+            if (state.players) setPlayers(state.players)
         }
 
         const handlePlayerAssigned = ({ role, name, currentTurn: turn }) => {
@@ -70,6 +80,21 @@ const App = () => {
         socket.on("player-assigned", handlePlayerAssigned)
         socket.on("update-diceroller", handleDiceUpdate)
         socket.on("turn-update", handleTurnUpdate)
+        const handlePlayersUpdate = (newPlayers) => {
+            const prev = playersRef.current
+            Object.values(newPlayers).forEach(p => {
+                const wasHere = Object.values(prev).some(pp => pp.name === p.name)
+                if (!wasHere) toast("success", `${p.name} se conectó`)
+            })
+            Object.values(prev).forEach(p => {
+                const stillHere = Object.values(newPlayers).some(np => np.name === p.name)
+                if (!stillHere) toast("warning", `${p.name} se desconectó`)
+            })
+            playersRef.current = newPlayers
+            setPlayers(newPlayers)
+        }
+
+        socket.on("players-update", handlePlayersUpdate)
 
         return () => {
             socket.off("connect", handleConnect)
@@ -77,6 +102,7 @@ const App = () => {
             socket.off("player-assigned", handlePlayerAssigned)
             socket.off("update-diceroller", handleDiceUpdate)
             socket.off("turn-update", handleTurnUpdate)
+            socket.off("players-update", handlePlayersUpdate)
         }
     }, [socket])
 
@@ -247,6 +273,7 @@ const App = () => {
                         </div>
                     )}
                     <Chat playerName={playerName} />
+                    <Scorer players={players} />
                     {!isSpectator && (
                         <div style={{ width: 320, textAlign: "center" }}>
                             <button onClick={resetBoard} className="reset-button" style={{ width: "100%" }}>
