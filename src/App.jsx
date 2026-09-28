@@ -228,7 +228,7 @@ const App = () => {
             <div className="app-container">
                 <div
                         className={`board-container${isMyTurn ? " my-turn" : ""}`}
-                        style={{ maxWidth: 600, margin: "auto", padding: "1rem", minHeight: "400px", display: "block", position: "relative" }}
+                        style={{ maxWidth: 600, margin: "auto", padding: "9px 60px", minHeight: "400px", display: "block", position: "relative" }}
                     >
                         {isSpectator && (
                             <div style={{

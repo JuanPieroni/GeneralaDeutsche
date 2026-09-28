@@ -55,14 +55,17 @@
 /* Contenedor de la tabla - efecto hoja */
 .board table {
     table-layout: fixed;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 1px 0;
     text-align: center;
     width: fit-content;
     min-width: 400px;
     background: var(--paper-cream);
-    overflow: hidden;
     position: relative;
-    border: 4px solid var(--german-gold);
+    border: 5px solid rgb(46, 210, 144);
+    border-radius: 9px;
+    overflow: hidden;
+    
 }
 
 .board table {
@@ -109,21 +112,27 @@
     position: relative;
     z-index: 1;
 }
-
+.board .tr-head th:not(:first-child) {
+    font-size: larger;
+}
 .board th:not(:first-child) {
     background: linear-gradient(135deg, var(--german-red), #ff4444);
+}
+
+.board th {
+    border-color: black ;
 }
 
 .board th:first-child {
     width: 120px;
     background: linear-gradient(135deg, var(--german-gold), #ffdd44);
     color: var(--ink-black);
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 2px rgba(217, 214, 214, 0.5);
 }
 
 /* Celdas de la tabla */
 .board td {
-    border: 2px solid var(--pencil-gray);
+    border: 1px solid var(--pencil-gray);
     padding: 0;
     width: 60px;
     height: 60px;
@@ -148,7 +157,7 @@
     padding: 8px;
     width: 120px;
     font-size: 0.85rem;
-    border-right: 3px solid var(--german-gold);
+    border-right: 1px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -436,3 +445,4 @@
 .diagonal-cell input:focus {
     animation: writing 0.3s ease-in-out;
 }
+
