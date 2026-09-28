@@ -73,24 +73,9 @@ const DiceRoller = ({
         ? `🎲 Tu turno, ${playerName || "jugador"}`
         : `⏳ Turno del oponente`
 
-    const turnColor = isMyTurn ? "#ffce00" : "#aaaaaa"
-
     return (
         <div className="dice-roller">
-
-            {/* Indicador de turno */}
-            <div style={{
-                margin: "0.5rem 0",
-                padding: "6px 16px",
-                borderRadius: 8,
-                background: isMyTurn ? "rgba(255,206,0,0.15)" : "rgba(100,100,100,0.15)",
-                border: `2px solid ${turnColor}`,
-                color: turnColor,
-                fontFamily: "Germania One, serif",
-                fontSize: "1rem",
-                textAlign: "center",
-                letterSpacing: 1,
-            }}>
+            <div className={`turn-indicator ${isMyTurn ? "turn-mine" : "turn-waiting"}`}>
                 {myRole ? turnLabel : "Conectando..."}
             </div>
 

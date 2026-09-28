@@ -89,6 +89,36 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.turn-indicator {
+  margin: 0.5rem 0;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-family: "Germania One", serif;
+  font-size: 1rem;
+  text-align: center;
+  letter-spacing: 1px;
+  transition: background 0.8s ease, border-color 0.8s ease, color 0.8s ease, box-shadow 0.8s ease;
+}
+
+.turn-mine {
+  background: rgba(255, 206, 0, 0.15);
+  border: 2px solid #ffce00;
+  color: #ffce00;
+  animation: neonGold 2s ease-in-out infinite;
+}
+
+.turn-waiting {
+  background: rgba(100, 100, 100, 0.1);
+  border: 2px solid #555;
+  color: #888;
+  box-shadow: none;
+}
+
+@keyframes neonGold {
+  0%, 100% { box-shadow: 0 0 6px rgba(255,206,0,0.4), inset 0 0 6px rgba(255,206,0,0.1); }
+  50%       { box-shadow: 0 0 16px rgba(255,206,0,0.8), inset 0 0 10px rgba(255,206,0,0.2); }
+}
+
 .btn-end-turn-active {
   background: linear-gradient(135deg, #1a7a1a, #228b22) !important;
   border: 2px solid #00ff88 !important;
